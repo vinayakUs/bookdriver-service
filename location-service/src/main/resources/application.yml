@@ -7,3 +7,11 @@ spring:
     name: location-service
 server:
   port: 8083
+
+
+
+app:
+  apis:
+    google:
+      maps:
+        key: 'AIzaSyDeBXMAScpCTcNeII10XNr541TfFw_dSYI'
