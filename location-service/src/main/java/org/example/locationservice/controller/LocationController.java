@@ -23,4 +23,6 @@ public class LocationController {
     public ResponseEntity<?> autocomplete(@RequestParam("query") String query,@RequestParam("sessionToken") String sessionToken) throws IOException, InterruptedException, ApiException {
         return ResponseEntity.ok().body(locationService.getPlaceAutocomplete(query,sessionToken));
     }
+
+
 }
