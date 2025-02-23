@@ -35,3 +35,27 @@ input {
 .suggestions li:hover {
   background: #f0f0f0;
 }
+
+
+.input-field {
+  box-sizing: border-box;
+  position: relative;
+  -webkit-box-flex: 1;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 0%;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-lines: nowrap;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 36px;
+  padding-right: 0;
+}

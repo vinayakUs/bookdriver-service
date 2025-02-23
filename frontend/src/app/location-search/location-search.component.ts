@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, ReactiveFormsModule} from '@angular/forms';
 import {debounce, debounceTime, distinctUntilChanged, takeUntil} from 'rxjs';
 import {NgForOf, NgIf} from '@angular/common';
-import {LocationService} from '../services/location.service';
+import {LocationService,AutoCompleteResult} from '../services/location.service';
 
 @Component({
   selector: 'app-location-search',
@@ -16,7 +16,8 @@ import {LocationService} from '../services/location.service';
 })
 export class LocationSearchComponent implements OnInit {
   searchControl = new FormControl();
-  results: string[] =[];
+  results: AutoCompleteResult[] =[];
+  @Input() type: string ='';
 
   constructor(private locationService: LocationService) {
   }
@@ -38,18 +39,8 @@ export class LocationSearchComponent implements OnInit {
   }
 
  private callApi(query: string) {
-    // Simulating an API call (replace with real API call)
-    // console.log('Calling API for:', query);
-    // setTimeout(() => {
-    //   this.results = [
-    //     `${query} City`,
-    //     `${query} Street`,
-    //     `${query} Avenue`
-    //   ]; // Example mock data
-    // }, 1000);
-    //
-   this.locationService.getAutoCompleteResults(query).subscribe(
-     (results:string[]) => {
+    this.locationService.getAutoCompleteResults(query,this.type).subscribe(
+     (results:AutoCompleteResult[]) => {
        this.results = results;
      },
      error => {
@@ -57,8 +48,8 @@ export class LocationSearchComponent implements OnInit {
      }
    )
   }
-  selectResult(result: string) {
-    this.searchControl.setValue(result,{emitEvent:false}); // Set selected value
+  selectResult(result: AutoCompleteResult) {
+    this.searchControl.setValue(result.mainText,{emitEvent:false}); // Set selected value
     this.results = []; // Clear suggestions
   }
 

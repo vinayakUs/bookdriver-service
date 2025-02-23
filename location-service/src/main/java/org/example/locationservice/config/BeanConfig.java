@@ -7,7 +7,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
 @Configuration
-public class CustomBeans {
+public class BeanConfig {
+
     @Value("${app.apis.google.maps.key}")
     private String googleMapsKey;
 
@@ -16,5 +17,4 @@ public class CustomBeans {
     public GeoApiContext geoApiContext() {
         return  new GeoApiContext.Builder().apiKey(googleMapsKey).build();
     }
-
 }
