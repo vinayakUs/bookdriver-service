@@ -4,6 +4,8 @@ import com.google.maps.errors.ApiException;
 import com.google.maps.model.AutocompletePrediction;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.locationservice.exception.ErrorCode;
+import org.example.locationservice.exception.PlaceNotFoundException;
 import org.example.locationservice.exception.ResourceNotFoundException;
 import org.example.locationservice.exception.TsAutocompleteException;
 import org.example.locationservice.model.dto.ApiResponseDto;
@@ -36,7 +38,7 @@ public class LocationController {
     public ResponseEntity<?> loadPlaceDetails(@Valid @RequestBody PlaceDetailRequestDto requestDto) throws IOException, InterruptedException, ApiException {
         return locationService.getPlaceDetails(requestDto)
                 .map(ResponseEntity::ok)
-                .orElseThrow(()->new ResourceNotFoundException("SD"));
+                .orElseThrow(()->new PlaceNotFoundException("Something Wrong",requestDto.getPlaceId(), ErrorCode.INTERNAL_SERVER_ERROR));
     }
 
 }

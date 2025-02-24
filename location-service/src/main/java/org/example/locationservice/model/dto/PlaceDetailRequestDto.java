@@ -1,5 +1,7 @@
 package org.example.locationservice.model.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +11,11 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PlaceDetailRequestDto {
 
+    @NotNull
+    @NotBlank
     private String placeId;
-        private String sessionToken;
+    @NotBlank
+    @NotNull
+    private String sessionToken;
 
 }

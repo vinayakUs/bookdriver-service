@@ -1,8 +1,11 @@
 package org.example.locationservice.exception.advice;
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.locationservice.exception.PlaceNotFoundException;
 import org.example.locationservice.model.dto.ApiResponseDto;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -44,6 +47,12 @@ public class LocationControllerAdvice {
             errors.put(error.getObjectName(), error.getDefaultMessage());
         });
         return new ApiResponseDto(false, "Validation Error", ex.getClass().getName(), resolvePathFromWebRequest(request));
+    }
+
+
+    @ExceptionHandler(PlaceNotFoundException.class)
+    public ResponseEntity<ApiResponseDto> handlePlaceNotFoundException(PlaceNotFoundException ex, WebRequest request) {
+        return new ResponseEntity<ApiResponseDto>(new ApiResponseDto(false,ex.getMessage()), HttpStatusCode.valueOf(ex.getErrorCode().getCode()));
     }
 
 }

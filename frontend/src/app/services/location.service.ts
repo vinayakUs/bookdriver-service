@@ -13,6 +13,9 @@ import {map, Observable} from 'rxjs';
   secondaryText: string;
   placeId: string;
 }
+export interface PlaceDetail{
+   placeId:string;
+}
 
 
 @Injectable({
@@ -36,39 +39,16 @@ export class LocationService {
         placeId: item.placeId
       }) as AutoCompleteResult))
     );
-    // return this.http.post<any[]>(`${this.apiUrl}/loadTSSuggestions`, body).pipe(
-    //   map((res) => {
-    //     res.map(item=>({
-    //       description: item.description,
-    //       mainText: item.structuredFormatting?.mainText || '',
-    //       secondaryText: item.structuredFormatting?.secondaryText || '',
-    //       placeId: item.placeId
-    //     }) as AutoCompleteResult)
-    //
-    //   })
-    // );
+
+  }
+
+  getPlaceDetail(id:string):Observable<PlaceDetail>{
+    const body={
+      "placeId":"ChIJLbZ-NFv9DDkRQJY4FbcFcgM",
+      "sessionToken":"sad"
+    }
+    this.http.post<any[]>(`${this.apiUrl}/loadPlaceDetails`,body).pipe(
+      map(response=>)
+    )
   }
 }
-//
-// export class LocationService {
-//
-//   private apiUrl:string = `http://localhost:8080/api/location`; // Use environment variable
-//
-//
-//   constructor(private http: HttpClient) {}
-//
-//   getAutoCompleteResults(q:string , type:string): Observable<AutoCompleteResult[]> {
-//       const body={
-//         "q":q,
-//         "searchToken":"rad",
-//         "type":type
-//       }
-//     return this.http.post<any[]>(`${this.apiUrl}/loadTSSuggestions`, body).pipe(
-//
-//     );
-//   }
-//
-//   }
-//
-
-
