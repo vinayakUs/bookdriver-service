@@ -25,6 +25,7 @@ export class MapComponent implements OnInit {
     const mapOptions: google.maps.MapOptions = {
       center: { lat: 28.6139, lng: 77.2090 }, // Delhi
       zoom: 12,
+      disableDefaultUI: true,
       styles:CUSTOM_MAP_STYLE,
       mapId: "MapId1" // You can configure your Map ID from Google Cloud
     };

@@ -1,6 +1,7 @@
 package org.example.locationservice.model.dto;
 
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,8 +14,13 @@ enum TSType {
 @Setter
 @NoArgsConstructor
 public class TSSuggestionsDto {
+
+    @NotNull
     private String searchToken;
+
+    @NotNull
     private String q;
+    @NotNull
     private TSType type;
 
     public TSSuggestionsDto(String searchToken, String q, TSType type) {
