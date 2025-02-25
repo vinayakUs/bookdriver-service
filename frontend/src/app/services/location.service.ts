@@ -13,10 +13,28 @@ import {map, Observable} from 'rxjs';
   secondaryText: string;
   placeId: string;
 }
-export interface PlaceDetail{
-   placeId:string;
+export interface PlaceDetail {
+  formattedAddress: string;
+  geometry: Geometry;
+  placeId: string;
+  vicinity?: string;
+  addressComponents: AddressComponent[];
 }
 
+export interface Geometry {
+  location: Location;
+}
+
+export interface Location {
+  lat: number;
+  lng: number;
+}
+
+export interface AddressComponent {
+  longName: string;
+  shortName: string;
+  types: string[];
+}
 
 @Injectable({
   providedIn: 'root'
@@ -42,13 +60,29 @@ export class LocationService {
 
   }
 
-  getPlaceDetail(id:string):Observable<PlaceDetail>{
+  getPlaceDetail(id:string,type:string):Observable<PlaceDetail>{
     const body={
       "placeId":"ChIJLbZ-NFv9DDkRQJY4FbcFcgM",
-      "sessionToken":"sad"
+      "sessionToken":"123"
     }
-    this.http.post<any[]>(`${this.apiUrl}/loadPlaceDetails`,body).pipe(
-      map(response=>)
-    )
+
+    return this.http.post<any>(`${this.apiUrl}/loadPlaceDetails`, body).pipe(
+      map(response=>({
+        formattedAddress: response.formattedAddress,
+        geometry: {
+          location:{
+            lat: response.geometry.location.lat,
+            lng: response.geometry.location.lng
+          }
+        },
+        placeId:response.placeId,
+        vicinity:response.vicinity??'',
+        addressComponents:response.addressComponents.map((comp:any) => ({
+          longName:comp.longName,
+          shortName:comp.shortName,
+          types:comp.types
+        }))
+      }) as PlaceDetail)
+    );
   }
 }

@@ -1,8 +1,20 @@
-<div class="search-container">
-  <input type="text" [formControl]="searchControl" class="input-field"  [placeholder]="type.charAt(0).toUpperCase()+type.slice(1).toLowerCase()+' Location..'" />
-  <ul class="suggestions" *ngIf="results.length >0">
-    <li *ngFor="let result of results" (click)="selectResult(result)">
-      {{ result.mainText +', '+ result.secondaryText}}
-    </li>
-  </ul>
+<!--<div class="search-container">-->
+<!--  <input type="text" [formControl]="searchControl" class="input-field"  [placeholder]="type.charAt(0).toUpperCase()+type.slice(1).toLowerCase()+' Location..'" />-->
+<!--  <ul class="suggestions" *ngIf="results.length >0">-->
+<!--    <li *ngFor="let result of results" (click)="selectResult(result)">-->
+<!--      {{ result.mainText +', '+ result.secondaryText}}-->
+<!--    </li>-->
+<!--  </ul>-->
+<!--</div>-->
+
+<div class="flex items-center gap-2 bg-gray-100 px-3 py-2 rounded-full w-fit">
+  <span class="text-black">●</span>
+  <input
+    type="text"
+    class="bg-transparent outline-none text-black w-full"
+    placeholder="Enter location"
+  />
+  <button class="text-gray-500 hover:text-black">
+    ✖
+  </button>
 </div>
