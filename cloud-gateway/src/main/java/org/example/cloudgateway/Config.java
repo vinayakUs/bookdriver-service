@@ -19,8 +19,9 @@ public class Config {
     @Bean
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route("location-service", r -> r.path("/api/location/**")
+                .route("location-service", r -> r.path("/api/**")
                         .uri("http://localhost:8083"))
+
                 .build();
     }
     @Bean

@@ -38,7 +38,7 @@ public class PlaceDetailDto {
         }).toList();
         this.placeId = placeDetails.placeId;
         this.formattedAddress = placeDetails.formattedAddress;
-        Location location = new Location(placeDetails.geometry.location.lat, placeDetails.geometry.location.lng);
+        Location location = new Location(placeDetails.geometry.location.lat, placeDetails.geometry.location.lng,null);
         Geometry geometry = new Geometry();
         geometry.location = location;
         this.geometry=geometry;
@@ -50,13 +50,7 @@ public class PlaceDetailDto {
         private Location location;
     }
 
-    @Setter
-    @Getter
-    @AllArgsConstructor
-    public static class Location {
-        private double lat;
-        private double lng;
-    }
+
 
     @Setter
     @Getter

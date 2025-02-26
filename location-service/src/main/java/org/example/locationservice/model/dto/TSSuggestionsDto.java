@@ -6,10 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-enum TSType {
-    PICKUP,
-    DESTINATION
-}
 @Getter
 @Setter
 @NoArgsConstructor

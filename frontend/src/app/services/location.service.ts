@@ -43,10 +43,10 @@ export class LocationService {
   private apiUrl = 'http://localhost:8080/api/location';
   constructor(private http: HttpClient) { }
 
-  getAutoCompleteResults(q:string,type:string):Observable<AutoCompleteResult[]>{
+  getAutoCompleteResults(q:string,type:string,token:string):Observable<AutoCompleteResult[]>{
     const body={
         "q":q,
-        "searchToken":"rad",
+        "searchToken":token,
         "type":type
       }
     return this.http.post<any[]>(`${this.apiUrl}/loadTSSuggestions`, body).pipe(
@@ -60,10 +60,10 @@ export class LocationService {
 
   }
 
-  getPlaceDetail(id:string,type:string):Observable<PlaceDetail>{
+  getPlaceDetail(id:string,type:string,token:string):Observable<PlaceDetail>{
     const body={
-      "placeId":"ChIJLbZ-NFv9DDkRQJY4FbcFcgM",
-      "sessionToken":"123"
+      "placeId":id,
+      "sessionToken":token
     }
 
     return this.http.post<any>(`${this.apiUrl}/loadPlaceDetails`, body).pipe(
