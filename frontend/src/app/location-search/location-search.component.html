@@ -95,7 +95,7 @@
   <!-- Dropdown List -->
   <ul *ngIf="results.length>0 && isDropdownOpen"
       class="absolute right-0 left-0 z-10 mt-1 max-h-60 w-full overflow-auto rounded-md border-gray-300 bg-white shadow-[0px_4px_16px_0px_rgba(0,_0,_0,_0.16)]">
-    <li *ngFor="let result of results" (click)="selectResult(result)"
+    <li *ngFor="let result of results" (click)="selectResult(result.placeId,result.mainText)"
         class="cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100"> {{ result.mainText + ', ' + result.secondaryText }}
     </li>
   </ul>

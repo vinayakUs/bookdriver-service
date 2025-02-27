@@ -1,7 +1,18 @@
 <!--<h1>sd</h1>-->
 <!--&lt;!&ndash;<app-location-search></app-location-search>&ndash;&gt;-->
 
-<app-location-search type="PICKUP" ></app-location-search>
-<h1 style="width: 100px;height: 500px"></h1>
-<app-location-search type="DESTINATION" ></app-location-search>
-<app-map></app-map>
+<!--<app-location-search type="PICKUP" ></app-location-search>-->
+<!--<app-location-search type="DESTINATION" ></app-location-search>-->
+<!--<app-map></app-map>-->
+<div class="flex h-screen">
+  <!-- Left Section (40%) -->
+  <div class="w-2/5 p-4 bg-gray-100 flex flex-col gap-4">
+    <app-location-search type="PICKUP"></app-location-search>
+    <app-location-search type="DESTINATION"></app-location-search>
+  </div>
+
+  <!-- Right Section (60%) -->
+  <div class="w-3/5 h-full">
+    <app-map class="w-full h-full"></app-map>
+  </div>
+</div>

@@ -3,6 +3,7 @@ import { CUSTOM_MAP_STYLE} from '../config/custom_map_theme';
 
 
 import {Location} from '../services/location.service';
+import {SharedLocationService} from '../services/shared-location.service';
 
 declare var google: any;
 
@@ -19,15 +20,31 @@ export class MapComponent implements OnInit {
   destinationMarker!: google.maps.marker.AdvancedMarkerElement;
   bounds!: google.maps.LatLngBounds;
 
-  constructor() {
+
+  constructor(private sharedLocationService: SharedLocationService,) {
   }
 
   ngOnInit(): void {
 
 
     this.initMap();
-    this.setPickUpMarker(({lat:18.732848,lng:73.664258}) as Location);
-    this.setDestinationMarker(({lat:17.631174,lng:73.859010}) as Location);
+    this.sharedLocationService.destinationSource$.subscribe(location => {
+      console.log("inside map destination"+location);
+
+      if(location){
+        console.log(location);
+        this.setDestinationMarker(({lat:location.lat,lng:location.lng}) as Location);
+      }
+    })
+    this.sharedLocationService.pickupSource$.subscribe(location => {
+      console.log("inside map pickup"+location);
+      if(location){
+        console.log(location);
+        this.setPickUpMarker(({lat:location.lat,lng:location.lng}) as Location);
+      }
+    })
+    // this.setPickUpMarker(({lat:18.732848,lng:73.664258}) as Location);
+    // this.setDestinationMarker(({lat:17.631174,lng:73.859010}) as Location);
   }
 
   setPickUpMarker(location: Location): void {
