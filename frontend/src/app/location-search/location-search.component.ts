@@ -4,13 +4,15 @@ import {debounce, debounceTime, distinctUntilChanged, takeUntil} from 'rxjs';
 import {NgForOf, NgIf} from '@angular/common';
 import {LocationService, AutoCompleteResult, PlaceDetail} from '../services/location.service';
 import { v4 as uuidv4 } from 'uuid';
+import {ClickOutsideDirective} from './click-outside.directive';
 
 @Component({
   selector: 'app-location-search',
   imports: [
     ReactiveFormsModule,
     NgIf,
-    NgForOf
+    NgForOf,
+    ClickOutsideDirective
   ],
   templateUrl: './location-search.component.html',
   styleUrl: './location-search.component.css'
@@ -24,6 +26,7 @@ export class LocationSearchComponent implements OnInit {
   @Output() locationSelected = new EventEmitter<{ lat: number, lng: number }>();
   isDropdownOpen:boolean = false;
   showClearButton = false;
+  open = false;
 
 
   constructor(private locationService: LocationService,private elementRef:ElementRef) {}
@@ -85,7 +88,17 @@ export class LocationSearchComponent implements OnInit {
   }
 
 
+  openDropdown() {
+    this.isDropdownOpen = true;
+  }
 
+  closeDropdown() {
+    this.isDropdownOpen = false; // Hide dropdown without clearing results
+  }
+
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
 
 }
 

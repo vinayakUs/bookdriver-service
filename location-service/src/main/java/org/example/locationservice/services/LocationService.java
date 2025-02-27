@@ -56,9 +56,12 @@ public class LocationService{
                PlaceDetailDto placeDetailDto = new PlaceDetailDto(placeDetails);
 
                return Optional.of(placeDetailDto);
-          }catch (IOException | ApiException|InterruptedException e){
+          }catch (IOException |InterruptedException e){
                log.error(e.getMessage(),e);
                throw new PlaceNotFoundException(e.getMessage(),requestDto.getPlaceId(), ErrorCode.NOT_FOUND);
+          }catch (ApiException e){
+               log.error(e.getMessage(),e);
+               throw new PlaceNotFoundException(e.getMessage(),requestDto.getPlaceId(), ErrorCode.FORBIDDEN);
           }
      }
 }
