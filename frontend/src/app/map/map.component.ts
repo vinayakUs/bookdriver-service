@@ -33,14 +33,13 @@ export class MapComponent implements OnInit {
 
       if(location){
         console.log(location);
-        this.setDestinationMarker(({lat:location.lat,lng:location.lng}) as Location);
+        this.setDestinationMarker(({lat:location.geometry.location.lat,lng:location.geometry.location.lng}) as Location);
       }
     })
     this.sharedLocationService.pickupSource$.subscribe(location => {
-      console.log("inside map pickup"+location);
+      console.log("inside map pickup"+location.geometry.location.lat);
       if(location){
-        console.log(location);
-        this.setPickUpMarker(({lat:location.lat,lng:location.lng}) as Location);
+        this.setPickUpMarker(({lat:location.geometry.location.lat,lng:location.geometry.location.lng}) as Location);
       }
     })
     // this.setPickUpMarker(({lat:18.732848,lng:73.664258}) as Location);
