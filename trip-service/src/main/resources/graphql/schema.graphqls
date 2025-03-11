@@ -1,0 +1,68 @@
+type Query {
+    _empty: String
+}
+scalar JSON
+
+type TripResponse {
+    errorCode: String
+    errorKey: String
+    plusOne: JSON
+    riderHasCompletedTrips: Boolean!
+    uuid: String!
+    checkoutActionParameters: JSON
+}
+
+input TripRequest {
+#    attribution: InputAttribution
+    capacity: Int
+    destinations: [InputLocation!]!
+    locationSource: String
+#    meta: String!
+    origin: InputOrigin!
+#    payment: InputTripPayment!
+#    type: String!
+#    vehicleView: InputVehicleView!
+}
+
+input InputAttribution {
+    sourceURL: String
+}
+
+input InputLocation {
+    addressLine1: String
+    addressLine2: String
+    coordinate: InputCoordinate
+    id: String
+    provider: String
+    source: String
+}
+
+input InputCoordinate {
+    latitude: Float!
+    longitude: Float!
+}
+
+input InputOrigin {
+    location: InputLocation!
+}
+
+input InputTripPayment {
+    paymentMethodDisplayName: String
+    profileUUID: String
+}
+
+input InputVehicleView {
+    description: String
+    id: Int
+}
+
+
+
+type Mutation {
+    tripRequest(request: TripRequest!): TripResponse!
+}
+
+
+#type Mutation {
+#    requestTrip(input: TripRequestInput!): TripResponse!
+#}
