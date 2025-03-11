@@ -3,10 +3,11 @@ package org.example.tripservice;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class TripRequest{
+public class TripRequest implements Serializable {
     //    private Attribution attribution;
     private int capacity;
     private List<Location> destinations;
@@ -25,7 +26,7 @@ public class TripRequest{
 //}
 
 @Data
-class Coordinate {
+class Coordinate implements Serializable {
     private double latitude;
     private double longitude;
 
@@ -33,7 +34,7 @@ class Coordinate {
 }
 
 @Data
-class Location {
+class Location implements Serializable {
     private String addressLine1;
     private String addressLine2;
     private Coordinate coordinate;
@@ -45,13 +46,13 @@ class Location {
 }
 
 @Data
-class Origin {
+class Origin implements Serializable {
     private Location location;
 
     // Getters and setters
 }
 @Data
-class Payment {
+class Payment implements Serializable {
     private String paymentMethodDisplayName;
     private String profileUUID;
 

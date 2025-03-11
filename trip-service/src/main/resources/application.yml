@@ -21,6 +21,14 @@ spring:
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+  data:
+    redis:
+      port: 19507
+      host: redis-19507.c277.us-east-1-3.ec2.redns.redis-cloud.com
+      password: nE8GGRHl9OVCkJIcdFel5WcslHn6bDh2
+      username: default
+#  redis-cli -u :19507
+
 
 #  kafka:
 #    bootstrap-servers: pkc-619z3.us-east1.gcp.confluent.cloud:9092
