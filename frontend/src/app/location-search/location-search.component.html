@@ -66,6 +66,45 @@
 <!--</div>-->
 
 
+<!--<div class="relative mt-4 w-full max-w-sm min-w-[200px]" appClickOutside (clickOutside)="closeDropdown()">-->
+
+<!--  <div class="relative">-->
+<!--    <input type="text"-->
+<!--           [formControl]="searchControl"-->
+<!--           (focus)="openDropdown()"-->
+<!--           [placeholder]="type.charAt(0).toUpperCase()+type.slice(1).toLowerCase()+' Location..'"-->
+<!--           class="w-full rounded-md border border-slate-200 bg-transparent py-2 pr-10 pl-3 text-sm text-slate-700 shadow-sm transition duration-300 placeholder:text-slate-400 hover:border-slate-300 focus:border-slate-400 focus:shadow focus:outline-none"/>-->
+<!--    <button *ngIf="!showClearButton"-->
+<!--            class="absolute top-1 right-1 rounded border border-transparent bg-slate-800 p-1.5 text-center text-sm text-white shadow-sm transition-all hover:bg-slate-700 hover:shadow focus:bg-slate-700 focus:shadow-none active:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"-->
+<!--            type="button">-->
+<!--      <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none">-->
+<!--        <path d="M10.5 13.5.5 11 21 3l-8 20.5-2.5-10Z" fill="currentColor"></path>-->
+<!--      </svg>-->
+<!--    </button>-->
+<!--    &lt;!&ndash; clear icon&ndash;&gt;-->
+<!--    <button *ngIf="showClearButton" (click)="clearInput()"-->
+<!--            class="absolute top-1 right-1 rounded border border-transparent bg-slate-800 p-1.5 text-center text-sm text-white shadow-sm transition-all hover:bg-slate-700 hover:shadow focus:bg-slate-700 focus:shadow-none active:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"-->
+<!--            type="button">-->
+
+<!--      <svg  xmlns="http://www.w3.org/2000/svg" width="14" height="14"  fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">-->
+<!--        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>-->
+<!--      </svg>-->
+<!--    </button>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; Dropdown List &ndash;&gt;-->
+<!--  <ul *ngIf="results.length>0 && isDropdownOpen"-->
+<!--      class="absolute right-0 left-0 z-10 mt-1 max-h-60 w-full overflow-auto rounded-md border-gray-300 bg-white shadow-[0px_4px_16px_0px_rgba(0,_0,_0,_0.16)]">-->
+<!--    <li *ngFor="let result of results" (click)="selectResult(result.placeId,result.mainText)"-->
+<!--        class="cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100"> {{ result.mainText + ', ' + result.secondaryText }}-->
+<!--    </li>-->
+<!--  </ul>-->
+<!--</div>-->
+
+
+
+
+
 <div class="relative mt-4 w-full max-w-sm min-w-[200px]" appClickOutside (clickOutside)="closeDropdown()">
 
   <div class="relative">
@@ -74,22 +113,37 @@
            (focus)="openDropdown()"
            [placeholder]="type.charAt(0).toUpperCase()+type.slice(1).toLowerCase()+' Location..'"
            class="w-full rounded-md border border-slate-200 bg-transparent py-2 pr-10 pl-3 text-sm text-slate-700 shadow-sm transition duration-300 placeholder:text-slate-400 hover:border-slate-300 focus:border-slate-400 focus:shadow focus:outline-none"/>
-    <button *ngIf="!showClearButton"
-            class="absolute top-1 right-1 rounded border border-transparent bg-slate-800 p-1.5 text-center text-sm text-white shadow-sm transition-all hover:bg-slate-700 hover:shadow focus:bg-slate-700 focus:shadow-none active:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-            type="button">
-      <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none">
-        <path d="M10.5 13.5.5 11 21 3l-8 20.5-2.5-10Z" fill="currentColor"></path>
-      </svg>
-    </button>
-    <!-- clear icon-->
-    <button *ngIf="showClearButton" (click)="clearInput()"
-            class="absolute top-1 right-1 rounded border border-transparent bg-slate-800 p-1.5 text-center text-sm text-white shadow-sm transition-all hover:bg-slate-700 hover:shadow focus:bg-slate-700 focus:shadow-none active:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-            type="button">
 
-      <svg  xmlns="http://www.w3.org/2000/svg" width="14" height="14"  fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
-        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
-      </svg>
+    <button *ngIf="!showClearButton && type=='PICKUP'"
+      id="prefilledLocationButton"
+      class="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+      aria-label="Clear text"
+    >
+      <i class="fa-solid fa-location-arrow"></i>
     </button>
+    <!--    <button *ngIf="!showClearButton"-->
+<!--            class="absolute top-1 right-1 rounded border border-transparent bg-slate-800 p-1.5 text-center text-sm text-white shadow-sm transition-all hover:bg-slate-700 hover:shadow focus:bg-slate-700 focus:shadow-none active:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"-->
+<!--            type="button">-->
+<!--      <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none">-->
+<!--        <path d="M10.5 13.5.5 11 21 3l-8 20.5-2.5-10Z" fill="currentColor"></path>-->
+<!--      </svg>-->
+<!--    </button>-->
+    <!-- clear icon-->
+    <button  *ngIf="showClearButton" (click)="clearInput()"
+      id="prefilledClearButton"
+      class="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+      aria-label="Clear text"
+    >
+      <i class="fa-solid fa-times"></i>
+    </button>
+<!--    <button *ngIf="showClearButton" (click)="clearInput()"-->
+<!--            class="absolute top-1 right-1 rounded border border-transparent bg-slate-800 p-1.5 text-center text-sm text-white shadow-sm transition-all hover:bg-slate-700 hover:shadow focus:bg-slate-700 focus:shadow-none active:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"-->
+<!--            type="button">-->
+
+<!--      <svg  xmlns="http://www.w3.org/2000/svg" width="14" height="14"  fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">-->
+<!--        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>-->
+<!--      </svg>-->
+<!--    </button>-->
   </div>
 
   <!-- Dropdown List -->

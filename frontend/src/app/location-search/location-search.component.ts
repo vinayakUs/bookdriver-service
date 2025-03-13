@@ -6,7 +6,6 @@ import {LocationService, AutoCompleteResult, PlaceDetail} from '../services/loca
 import { v4 as uuidv4 } from 'uuid';
 import {ClickOutsideDirective} from './click-outside.directive';
 import {SharedLocationService} from '../services/shared-location.service';
-
 @Component({
   selector: 'app-location-search',
   imports: [
