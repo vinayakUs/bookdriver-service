@@ -7,15 +7,15 @@ import java.time.Instant;
 
 @Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ApiResponseDto {
+public class ApiResponseDto<T> {
 
-    private final String data;
+    private final T data;
     private final Boolean success;
     private final String timestamp;
     private final String cause;
     private final String path;
 
-    public ApiResponseDto(Boolean success, String data, String cause, String path) {
+    public ApiResponseDto(Boolean success, T data, String cause, String path) {
         this.timestamp = Instant.now().toString();
         this.data = data;
         this.success = success;
@@ -23,7 +23,7 @@ public class ApiResponseDto {
         this.path = path;
     }
 
-    public ApiResponseDto(Boolean success, String data) {
+    public ApiResponseDto(Boolean success, T data) {
         this.timestamp = Instant.now().toString();
         this.data = data;
         this.success = success;

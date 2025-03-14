@@ -1,0 +1,138 @@
+package org.example.authservice.service;
+
+import org.example.authservice.exception.InvalidTokenRequestException;
+import org.example.authservice.exception.PasswordResetLinkException;
+import org.example.authservice.exception.ResourceNotFoundException;
+import org.example.authservice.model.dto.PasswordResetRequestDto;
+import org.example.authservice.model.entity.PasswordResetToken;
+import org.example.authservice.model.entity.User;
+import org.example.authservice.repository.PasswordResetTokenRepository;
+import org.example.authservice.utils.Util;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Collections;
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+public class PasswordResetTokenService {
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
+
+    @Value("${app.token.password.reset.duration}")
+    private Long expiration;
+
+    @Value("${app.token.password.generate.interval}")
+    private Long tokenCreationInterval;
+
+    /**
+     * Creates and returns a new password token to which a user must be
+     * associated and persists in the token repository.
+     */
+    public Optional<PasswordResetToken> createToken(User user) {
+        PasswordResetToken token = createTokenWithUser(user);
+
+        if (!checkTokenCreationPolicy(user)) {
+            throw new PasswordResetLinkException(user.getEmail(), "Please wait before sending other request.");
+        }
+
+        removeTokenByUser(user);
+        return Optional.of(passwordResetTokenRepository.save(token));
+    }
+
+    /*
+     * Helper function
+     * check token can be created true if can be created else false
+     */
+
+    public boolean checkTokenCreationPolicy(User user) {
+
+        return passwordResetTokenRepository.findByUser(user).map((PasswordResetToken p) -> {
+
+            Instant ago = Instant.now().minus(Duration.ofMillis(tokenCreationInterval));
+            Instant crts = p.getCreatedDate();
+            System.out.println("Instant " + Instant.now());
+            System.out.println(crts);
+            return crts.isBefore(ago) & !crts.isAfter(ago);
+
+        }).orElse(true);
+
+    }
+
+    /*
+     * Remove tokens for User if exist else do nothing
+     */
+    public void removeTokenByUser(User user) {
+        passwordResetTokenRepository.removeByUser(user);
+
+    }
+
+    /*
+     * Helper function to create token associated to user
+     */
+    PasswordResetToken createTokenWithUser(User user) {
+        String tokenID = Util.generateRandomUuid();
+        PasswordResetToken passwordResetToken = new PasswordResetToken();
+        passwordResetToken.setExpiryDate(Instant.now().plusMillis(expiration));
+        passwordResetToken.setClaimed(false);
+        passwordResetToken.setActive(true);
+        passwordResetToken.setUser(user);
+        passwordResetToken.setCreatedDate(Instant.now());
+        passwordResetToken.setToken(tokenID);
+        return passwordResetToken;
+    }
+
+    /**
+     * Returns the PasswordResetToken or else throw Exception
+     * checks all parameters in this method for checking valid token
+     * match email, verify expiration
+     */
+    public PasswordResetToken getValidToken(PasswordResetRequestDto requestDto) {
+        PasswordResetToken tokenObj = passwordResetTokenRepository.findByToken(requestDto.getToken()).orElseThrow(() -> {
+            return new ResourceNotFoundException("Password Reset Token", "Token Id", requestDto.getToken());
+        });
+        matchEmail(tokenObj, requestDto.getEmail());
+        verifyExpiration(tokenObj);
+        return tokenObj;
+    }
+
+    /**
+     * Verify whether the token provided has expired or not on the basis of the current
+     * server time and/or throw error otherwise
+     */
+    private void verifyExpiration(PasswordResetToken tokenObj) {
+        if (tokenObj.getExpiryDate().compareTo(Instant.now()) < 0) {
+            throw new InvalidTokenRequestException("Password Reset Token", tokenObj.getToken(), "Expired Token. Request new Token");
+        }
+        if (!tokenObj.getActive()) {
+            throw new InvalidTokenRequestException("Password Reset Token", tokenObj.getToken(), "Inactive Token");
+        }
+    }
+
+    /**
+     * Mark this password reset token as claimed (used by user to update password)
+     * Hence, we need to invalidate all the existing password reset tokens prior to changing the user password
+     */
+    public PasswordResetToken claimToken(PasswordResetToken token) {
+        User user = token.getUser();
+        token.setClaimed(true);
+        passwordResetTokenRepository.findAllByActiveTrueAndUser(user).orElse(Collections.emptyList()).forEach(passwordResetToken -> {
+            passwordResetToken.setActive(false);
+        });
+        return token;
+    }
+
+    /**
+     * Match whether the token provided was actually generated by the user
+     */
+    private void matchEmail(PasswordResetToken tokenObj, String email) {
+        if (!tokenObj.getUser().getEmail().equalsIgnoreCase(email)) {
+            throw new InvalidTokenRequestException("Password Reset Token", tokenObj.getToken(), "Token Invalid for given User " + email);
+        }
+    }
+
+
+}

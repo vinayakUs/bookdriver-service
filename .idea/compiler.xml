@@ -9,14 +9,16 @@
         <outputRelativeToContentRoot value="true" />
         <module name="eureka-service" />
         <module name="cloud-gateway" />
+        <module name="auth-service" />
       </profile>
-      <profile name="Annotation profile for trip-service" enabled="true">
+      <profile name="Annotation profile for driver-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.36/lombok-1.18.36.jar" />
         </processorPath>
+        <module name="driver-service" />
         <module name="trip-service" />
         <module name="location-service" />
       </profile>
@@ -24,7 +26,9 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="auth-service" options="-parameters" />
       <module name="cloud-gateway" options="-parameters" />
+      <module name="driver-service" options="-parameters" />
       <module name="eureka-service" options="-parameters" />
       <module name="location-service" options="-parameters" />
       <module name="trip-service" options="-parameters" />
