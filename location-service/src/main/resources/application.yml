@@ -10,4 +10,4 @@ app:
   apis:
     google:
       maps:
-        key: 'AIzaSyBmUi1ZvYRWTCb97TtOBd5YGb9ZltmYZGw'
+        key: ${GOOGLE_API_KEY}

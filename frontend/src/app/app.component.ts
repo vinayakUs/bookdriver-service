@@ -8,7 +8,7 @@ import {FormsModule} from '@angular/forms';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, LocationSearchComponent, MapComponent, GoogleMapsModule, FormsModule],
-  templateUrl: './app.component.html',
+  templateUrl: '<router-outlet></router-outlet>',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
