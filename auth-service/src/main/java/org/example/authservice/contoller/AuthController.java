@@ -1,11 +1,13 @@
 package org.example.authservice.contoller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.example.authservice.event.OnGenerateResetLinkEvent;
 import org.example.authservice.event.OnRegenerateEmailVerificationEvent;
 import org.example.authservice.event.OnUserAccountChangeEvent;
 import org.example.authservice.event.OnUserRegistrationCompleteEvent;
 import org.example.authservice.exception.*;
 import org.example.authservice.model.CustomUserDetails;
+import org.example.authservice.model.DeviceInfo;
 import org.example.authservice.model.dto.*;
 import org.example.authservice.model.entity.EmailVerificationToken;
 import org.example.authservice.model.entity.PasswordResetToken;
@@ -16,6 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.authservice.service.RefreshTokenService;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +41,7 @@ public class AuthController {
     private final AuthService authService;
     private final ApplicationEventPublisher eventPublisher;
     private final JwtTokenProvider tokenProvider;
+    private final RefreshTokenService refreshTokenService;
 
     /**
      * Checks is a given email is in use or not.
@@ -154,7 +158,15 @@ public class AuthController {
     @PostMapping("/login")
     @Operation(summary = "Logs the user in to the system and return the auth tokens")
     public ResponseEntity<?> authenticateUser(
-            @Param(value = "The LoginRequest payload") @Valid @RequestBody LoginRequestDto loginRequestDto) {
+            @Param(value = "The LoginRequest payload") @Valid @RequestBody LoginRequestDto loginRequestDto
+    , HttpServletRequest httpServletRequest,
+            @RequestHeader("User-Agent") String useragent
+            ) {
+        String clientIp = httpServletRequest.getHeader("X-Forwarded-For");
+        clientIp = clientIp == null||clientIp.isEmpty() ?httpServletRequest.getRemoteAddr() : clientIp.split(",")[0];
+        DeviceInfo deviceInfo = new DeviceInfo(clientIp,useragent);
+        System.out.println("deviceInfo: " + deviceInfo);
+
 
         Authentication authentication = authService.authenticateUser(loginRequestDto).orElseThrow(
                 () -> new UserLoginException("Couldn't login user [" + loginRequestDto + "]"));
@@ -165,11 +177,19 @@ public class AuthController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // return authService.createAuthAndRefreshToken(authentication).;
-        String jwtToken = authService.generateJWTToken(userDetails);
+        return authService.createRefreshToken(authentication,deviceInfo).map(
+                refreshToken->{
+                    String jwtToken = authService.generateJWTToken(userDetails);
+                    return ResponseEntity.ok().body(new JwtAuthenticationResponseDto(jwtToken, refreshToken,
+                            tokenProvider.getExpiryDuration(),refreshTokenService.getExpiryDuration()));
 
-        return ResponseEntity.ok().body(new JwtAuthenticationResponseDto(jwtToken, "",
-                tokenProvider.getExpiryDuration()));
+                }
+        ).orElseThrow(
+                ()->new UserLoginException("Couldn't login user [" + loginRequestDto + "]")
+        );
+
+//        return ResponseEntity.ok().body(new JwtAuthenticationResponseDto(jwtToken, "",
+//                tokenProvider.getExpiryDuration()));
 
     }
 
@@ -219,5 +239,20 @@ public class AuthController {
                 "password"));
 
     }
+
+//    /**
+//     * Refresh the expired jwt token using a refresh token for the specific device
+//     * and return a new token to the caller
+//     */
+//    @PostMapping("/refresh")
+//    public ResponseEntity<?> refreshToken(
+//            @RequestHeader("User-Agent") String userAgent,
+//            @RequestHeader("X-Forwarded-For") String ipAddress,
+//            @RequestHeader("Username") String usernamex
+//    ){
+//        DeviceInfo deviceInfo = new DeviceInfo(userAgent, ipAddress);
+//
+//
+//    }
 
 }

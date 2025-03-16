@@ -12,12 +12,17 @@ public class JwtAuthenticationResponseDto {
 
     private String tokenType;
 
-    private Long expiryDuration;
+    private Long accessExpiryDuration;
 
-    public JwtAuthenticationResponseDto(String accessToken, String refreshToken, Long expiryDuration) {
+    private Long refreshExpiryDuration;
+
+
+    public JwtAuthenticationResponseDto(String accessToken, String refreshToken, Long accessExpiryDuration, Long refreshExpiryDuration) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
-        this.expiryDuration = expiryDuration;
+        this.accessExpiryDuration = accessExpiryDuration;
+        this.refreshExpiryDuration = refreshExpiryDuration;
+
         tokenType = "Bearer ";
     }
 

@@ -4,10 +4,8 @@ import org.example.authservice.exception.PasswordResetLinkException;
 import org.example.authservice.exception.ResourceAlreadyInUseException;
 import org.example.authservice.exception.ResourceNotFoundException;
 import org.example.authservice.model.CustomUserDetails;
-import org.example.authservice.model.dto.LoginRequestDto;
-import org.example.authservice.model.dto.PasswordResetLinkRequestDto;
-import org.example.authservice.model.dto.PasswordResetRequestDto;
-import org.example.authservice.model.dto.RegistrationRequestDto;
+import org.example.authservice.model.DeviceInfo;
+import org.example.authservice.model.dto.*;
 import org.example.authservice.model.entity.EmailVerificationToken;
 import org.example.authservice.model.entity.PasswordResetToken;
 import org.example.authservice.model.entity.User;
@@ -18,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +36,7 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordResetTokenService passwordResetTokenService;
     private final PasswordEncoder passwordEncoder;
+    private final RefreshTokenService refreshTokenService;
 
     /**
      * Checks if the given email already exists in the database repository or not
@@ -177,6 +177,28 @@ public class AuthService {
         );
 
     }
+    /**
+     * refresh token for AUthenticated user
+     */
+    public Optional<String> createRefreshToken(Authentication authentication, DeviceInfo deviceInfo) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+return       Optional.of(  refreshTokenService.refreshToken(userDetails.getUsername(),deviceInfo));
+
+
+    }
+
+/**
+ * Refresh the expired jwt token using a refresh token and device info. The
+ * * refresh token is mapped to a specific device and if it is unexpired, can help
+ * * generate a new jwt. If the refresh token is inactive for a device or it is expired,
+ * * throw appropriate errors.
+ */
+//public Optional<String> refreshJwtToken(RefreshTokenReqeust refreshTokenReqeust) {
+//    String refreshedToken = refreshTokenReqeust.getRefreshToken();
+//    log.info("Refreshed token: " + refreshedToken);
+//
+//}
 
 
 }
