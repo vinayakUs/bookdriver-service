@@ -1,91 +1,55 @@
-<!--<div class="col-md-12">-->
-<!--  <div class="card card-container">-->
 
-<!--    <form-->
-<!--      *ngIf="!isLoggedIn"-->
-<!--      name="form"-->
-<!--      (ngSubmit)="f.form.valid && onSubmit()"-->
-<!--      #f="ngForm"-->
-<!--      novalidate-->
-<!--    >-->
-<!--      <div class="form-group">-->
-<!--        <input-->
-<!--          type="text"-->
-<!--          class="form-control"-->
-<!--          name="username"-->
-<!--          [(ngModel)]="form.username"-->
-<!--          required-->
-<!--          #username="ngModel"-->
-<!--          [ngClass]="{ 'is-invalid': f.submitted && username.errors }"-->
-<!--        />-->
-<!--        <div *ngIf="username.errors && f.submitted" class="invalid-feedback">-->
-<!--          Username is required!-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class="form-group">-->
-<!--        <input-->
-<!--          type="password"-->
-<!--          class="form-control"-->
-<!--          name="password"-->
-<!--          [(ngModel)]="form.password"-->
-<!--          required-->
-<!--          minlength="6"-->
-<!--          #password="ngModel"-->
-<!--          [ngClass]="{ 'is-invalid': f.submitted && password.errors }"-->
-<!--        />-->
-<!--        <div *ngIf="password.errors && f.submitted" class="invalid-feedback">-->
-<!--          <div *ngIf="password.errors['required']">Password is required</div>-->
-<!--          <div *ngIf="password.errors['minlength']">-->
-<!--            Password must be at least 6 characters-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class="form-group">-->
-<!--        <button class="btn btn-primary btn-block">-->
-<!--          Login-->
-<!--        </button>-->
-<!--      </div>-->
-<!--      <div class="form-group">-->
-<!--        <div *ngIf="f.submitted && isLoginFailed" class="alert alert-danger" role="alert">-->
-<!--          Login failed: {{ errorMessage }}-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </form>-->
+<div class="min-h-screen bg-no-repeat bg-cover bg-center"
+      style="background-image: url('https://images.unsplash.com/photo-1486520299386-6d106b22014b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80');">
 
-<!--    <div class="alert alert-success" *ngIf="isLoggedIn">-->
-<!--      Logged in as {{ roles }}.-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</div>-->
-<!--<div class="col-md-6 offset-md-3 mt-5">-->
-<!--  <div class="alert alert-info">-->
-<!--    Username: test<br />-->
-<!--    Password: test-->
-<!--  </div>-->
-<!--  <div class="card">-->
-<!--    <h4 class="card-header py-3">Angular 14 JWT Login Example</h4>-->
-<!--    <div class="card-body">-->
-<!--      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">-->
-<!--        <div class="mb-3">-->
-<!--          <label class="form-label">Username</label>-->
-<!--          <input type="text" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />-->
-<!--          <div *ngIf="submitted && f.username.errors" class="invalid-feedback">-->
-<!--            <div *ngIf="f.username.errors.required">Username is required</div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="mb-3">-->
-<!--          <label class="form-label">Password</label>-->
-<!--          <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />-->
-<!--          <div *ngIf="submitted && f.password.errors" class="invalid-feedback">-->
-<!--            <div *ngIf="f.password.errors.required">Password is required</div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <button [disabled]="loading" class="btn btn-primary">-->
-<!--          <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>-->
-<!--          Login-->
-<!--        </button>-->
-<!--        <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>-->
-<!--      </form>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</div>-->
+<div class="flex justify-end min-h-screen">
+  <!-- Right Side: Form -->
+  <div class="bg-white min-h-screen w-full md:w-1/2 flex justify-center items-center px-6">
+    <div class="w-full max-w-md">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <!-- Welcome Text -->
+        <div class="mb-6">
+          <span class="text-sm text-gray-900">Welcome back</span>
+          <h1 class="text-2xl font-bold">Login to your account</h1>
+        </div>
+
+        <!-- Email Field -->
+        <div class="mb-4">
+          <label class="block text-md mb-2" for="email">Email</label>
+          <input class="px-4 w-full border-2 py-2 rounded-md text-sm outline-none"
+                 type="email" name="email"  formControlName="email" placeholder="Enter your email">
+        </div>
+
+        <!-- Password Field -->
+        <div class="mb-4">
+          <label class="block text-md mb-2" for="password">Password</label>
+          <input class="px-4 w-full border-2 py-2 rounded-md text-sm outline-none"
+                 type="password" name="password"  formControlName="password" placeholder="Enter your password">
+        </div>
+
+        <!-- Remember Me & Forgot Password -->
+        <div class="flex justify-between mb-4">
+          <div>
+            <input class="cursor-pointer" type="checkbox" formControlName="driver" name="driver">
+            <span class="text-sm"> Driver </span>
+          </div>
+          <span class="text-sm text-blue-700 hover:underline cursor-pointer">Forgot password?</span>
+        </div>
+
+        <!-- Login Button -->
+        <button type="submit" class="w-full bg-green-500 hover:bg-green-400 text-white py-2 rounded-md transition duration-100">
+          Login now
+        </button>
+
+      </form>
+
+      <!-- Sign-Up Prompt -->
+      <p class="mt-6 text-center">Don't have an account?
+        <span class="cursor-pointer text-sm text-blue-600">Join free today</span>
+      </p>
+    </div>
+  </div>
+</div>
+
+</div>
+

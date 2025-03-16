@@ -15,6 +15,7 @@ import org.example.locationservice.exception.ErrorCode;
 import org.example.locationservice.model.dto.PlaceDetailDto;
 import org.example.locationservice.model.dto.PlaceDetailRequestDto;
 import org.example.locationservice.model.dto.TSSuggestionsDto;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -31,8 +32,10 @@ public class LocationService{
       * Returns a list of nullable Places as per the user Query
       * @return Optional<AutocompletePrediction[]>
       */
+     @Cacheable(value = "autocompleteCache" , key = "#requestDto.q")
      public Optional<AutocompletePrediction[]> getAutocompletePlaces( TSSuggestionsDto requestDto) throws IOException, InterruptedException, ApiException {
           try {
+               System.out.println("API call for autocomplete places");
                // Convert sessionToken string to Google API SessionToken object
                PlaceAutocompleteRequest.SessionToken token = new PlaceAutocompleteRequest.SessionToken(requestDto.getSearchToken());
                // Create the autocomplete request with session token
@@ -47,8 +50,9 @@ public class LocationService{
      /**
       * reruns Optional PlaceDetail
       */
-
+     @Cacheable(value = "placeDetailCache" , key = "#requestDto.placeId")
      public Optional<PlaceDetailDto> getPlaceDetails(PlaceDetailRequestDto requestDto) throws IOException, InterruptedException, ApiException {
+          System.out.println("API call for place details");
           try {
 
                PlaceAutocompleteRequest.SessionToken token = new PlaceAutocompleteRequest.SessionToken(requestDto.getSessionToken());

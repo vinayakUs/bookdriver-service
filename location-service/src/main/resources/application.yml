@@ -1,8 +1,16 @@
 spring:
+  cache:
+    jcache:
+      config: classpath:ehCache.xml
+    type: jcache
+
   application:
     name: location-service
+
 server:
   port: 8083
+#  spring.cache.type=
+#  spring.cache.ehcache.config=classpath:ehcache.xml
 
 
 
