@@ -9,7 +9,5 @@ import {inject, PLATFORM_ID} from '@angular/core';
 bootstrapApplication(AppComponent, {
   providers: [provideRouter(routes) ,
     provideHttpClient()
-
-
   ]
 });
