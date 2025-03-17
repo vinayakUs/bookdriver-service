@@ -5,10 +5,7 @@ import org.example.authservice.exception.*;
 import org.example.authservice.model.dto.ApiResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
@@ -89,6 +86,13 @@ return null;
     @ResponseStatus(HttpStatus.EXPECTATION_FAILED)
     @ResponseBody
     public ApiResponseDto handleUserLoginException(UserLoginException ex, WebRequest request) {
+        return new ApiResponseDto(false, ex.getMessage(), ex.getClass().getName(), resolvePathFromWebRequest(request));
+    }
+
+    @ExceptionHandler(TokenRefreshException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ApiResponseDto handleTokenRefreshException(TokenRefreshException ex,WebRequest request){
         return new ApiResponseDto(false, ex.getMessage(), ex.getClass().getName(), resolvePathFromWebRequest(request));
     }
 

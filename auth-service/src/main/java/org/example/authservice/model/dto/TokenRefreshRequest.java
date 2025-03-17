@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class RefreshTokenReqeust
+public class TokenRefreshRequest
 {
     @NotEmpty(message = "Empty token provided")
     private String refreshToken;

@@ -19,8 +19,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.authservice.service.RefreshTokenService;
+import org.example.authservice.utils.Utils;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -162,10 +164,9 @@ public class AuthController {
     , HttpServletRequest httpServletRequest,
             @RequestHeader("User-Agent") String useragent
             ) {
-        String clientIp = httpServletRequest.getHeader("X-Forwarded-For");
-        clientIp = clientIp == null||clientIp.isEmpty() ?httpServletRequest.getRemoteAddr() : clientIp.split(",")[0];
-        DeviceInfo deviceInfo = new DeviceInfo(clientIp,useragent);
-        System.out.println("deviceInfo: " + deviceInfo);
+        String clientIp = Utils.getClientIpAddress(httpServletRequest);
+         DeviceInfo deviceInfo = new DeviceInfo(clientIp, useragent);
+        System.out.println("deviceInfo: /login " + deviceInfo);
 
 
         Authentication authentication = authService.authenticateUser(loginRequestDto).orElseThrow(
@@ -240,19 +241,30 @@ public class AuthController {
 
     }
 
-//    /**
-//     * Refresh the expired jwt token using a refresh token for the specific device
-//     * and return a new token to the caller
-//     */
-//    @PostMapping("/refresh")
-//    public ResponseEntity<?> refreshToken(
-//            @RequestHeader("User-Agent") String userAgent,
+    /**
+     * Refresh the expired jwt token using a refresh token for the specific device
+     * and return a new token to the caller
+     */
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refreshToken(
+            @RequestHeader("User-Agent") String userAgent,
+HttpServletRequest httpServletRequest,
 //            @RequestHeader("X-Forwarded-For") String ipAddress,
-//            @RequestHeader("Username") String usernamex
-//    ){
-//        DeviceInfo deviceInfo = new DeviceInfo(userAgent, ipAddress);
-//
-//
-//    }
+            @RequestBody TokenRefreshRequest tokenRefreshRequest
+    ){
+        String clientIp = Utils.getClientIpAddress(httpServletRequest);
+        DeviceInfo deviceInfo = new DeviceInfo(clientIp, userAgent);
+        System.out.println("deviceInfo: /refresh " + deviceInfo);
+       return authService.refreshJwtToken(tokenRefreshRequest, deviceInfo).map(token->{
+//            return new ResponseEntity<>(token, HttpStatus.OK);
+
+           String updatedRefToken = refreshTokenService.refreshToken(refreshTokenService.getClaimsFromToken(tokenRefreshRequest.getRefreshToken()).getSubject(),deviceInfo);
+           return ResponseEntity.ok().body(new JwtAuthenticationResponseDto(token, updatedRefToken,
+                   tokenProvider.getExpiryDuration(),refreshTokenService.getExpiryDuration()));
+
+       }).orElseThrow(()->new TokenRefreshException(tokenRefreshRequest.getRefreshToken(),"INside error"));
+
+
+    }
 
 }

@@ -6,9 +6,9 @@ import jakarta.validation.constraints.NotNull;
 @Schema(name = "Login Request", description = "The login request payload")
 public class LoginRequestDto {
 
-    @NotNull(message = "Login Username can be null but not blank")
-    @Schema(name = "Registered username", allowableValues = "NonEmpty String")
-    private String username;
+//    @NotNull(message = "Login Username can be null but not blank")
+//    @Schema(name = "Registered username", allowableValues = "NonEmpty String")
+//    private String username;
 
     @NotNull(message = "Login Email can be null but not blank")
     @Schema(name = "User registered email", allowableValues = "NonEmpty String")
@@ -25,8 +25,8 @@ public class LoginRequestDto {
     // "deviceInfo object")
     // private DeviceInfo deviceInfo;
 
-    public LoginRequestDto(String username, String email, String password) {
-        this.username = username;
+    public LoginRequestDto(   String email, String password) {
+//        this.username = username;
         this.email = email;
         this.password = password;
         // this.deviceInfo = deviceInfo;
@@ -34,14 +34,14 @@ public class LoginRequestDto {
 
     public LoginRequestDto() {
     }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
+//
+//    public String getUsername() {
+//        return username;
+//    }
+//
+//    public void setUsername(String username) {
+//        this.username = username;
+//    }
 
     public String getEmail() {
         return email;

@@ -9,29 +9,7 @@ import {AuthService} from '../../service/auth.service';
 @Component({
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, RouterModule],
-  templateUrl: './login.component.html',
-  // template: `
-  //   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-  //     <div>
-  //       <label>Email:</label>
-  //       <input type="text" formControlName="email" required>
-  //     </div>
-  //     <div>
-  //       <label>Username:</label>
-  //       <input type="text" formControlName="username" required>
-  //     </div>
-  //     <div>
-  //       <label>Type:</label>
-  //       <input type="text" formControlName="type" required>
-  //     </div>
-  //     <div>
-  //       <label>Password:</label>
-  //       <input type="password" formControlName="password" required>
-  //     </div>
-  //     <button type="submit">Login</button>
-  //     <div *ngIf="loginError">{{ loginError }}</div>
-  //   </form>
-  // `
+  templateUrl: './login.component.html'
 })
 export class LoginComponent {
   loginForm: FormGroup;
@@ -58,7 +36,15 @@ export class LoginComponent {
       const { email,driver, password } = this.loginForm.value;
       this.authService.login(email,email.split('@',1)[0], driver?'DRIVER':'USER', password).subscribe({
         next: () =>{
-          return this.router.navigate(['/dashboard'])
+          console.log("next login");
+          this.router.navigateByUrl('/dashboard').then(success => {
+            if (success) {
+              console.log("✅ Navigation successful!");
+            } else {
+              console.error("❌ Navigation failed!");
+            }
+          });
+          // return this.router.navigate(['/dashboard'])
         },
         error: (err: HttpErrorResponse) => {
           this.loginError = err.error?.message || 'Login failed';

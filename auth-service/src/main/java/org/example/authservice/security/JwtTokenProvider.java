@@ -51,6 +51,10 @@ public class JwtTokenProvider {
     }
 
     /**
+     * Gnererate refresh jwt token
+     */
+
+    /**
      * Return the jwt expiration for the client so that they can execute
      * the refresh token logic appropriately
      */

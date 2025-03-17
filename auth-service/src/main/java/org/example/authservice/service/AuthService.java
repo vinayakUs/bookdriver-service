@@ -3,6 +3,7 @@ package org.example.authservice.service;
 import org.example.authservice.exception.PasswordResetLinkException;
 import org.example.authservice.exception.ResourceAlreadyInUseException;
 import org.example.authservice.exception.ResourceNotFoundException;
+import org.example.authservice.exception.TokenRefreshException;
 import org.example.authservice.model.CustomUserDetails;
 import org.example.authservice.model.DeviceInfo;
 import org.example.authservice.model.dto.*;
@@ -150,6 +151,15 @@ public class AuthService {
     }
 
     /**
+     * Generates Jwt token based on userId
+     * User for refresh access token
+     * User after validating Refresh Token
+     */
+//    private String generateNewJwtToken(String userid) {
+//
+//    }
+
+    /**
      * Generates a password reset token from the given reset request
      */
     public Optional<PasswordResetToken> generatePasswordResetToken(PasswordResetLinkRequestDto passwordResetLinkRequest) {
@@ -178,13 +188,58 @@ public class AuthService {
 
     }
     /**
-     * refresh token for AUthenticated user
+     * refresh token for Authenticated user
      */
     public Optional<String> createRefreshToken(Authentication authentication, DeviceInfo deviceInfo) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
-return       Optional.of(  refreshTokenService.refreshToken(userDetails.getUsername(),deviceInfo));
+return       Optional.of(  refreshTokenService.refreshToken(String.valueOf(userDetails.getId()),deviceInfo));
 
+
+    }
+
+
+    public Optional<String> refreshJwtToken(TokenRefreshRequest tokenRefreshRequest,DeviceInfo deviceInfo) {
+        //checks the db for refresh token for now ref token not stored in db
+        String refreshToken = tokenRefreshRequest.getRefreshToken();
+
+       return refreshTokenService.getRefreshToken(refreshToken).map(db_refreshToken->{
+            refreshTokenService.validateToken(db_refreshToken);
+            refreshTokenService.validateDeviceForToken(db_refreshToken,deviceInfo);
+            return db_refreshToken;
+        }).map(
+               token->{
+                   String userid = refreshTokenService.getClaimsFromToken(refreshToken).getSubject();
+                   Optional<User> optionalUser = userService.findById(Long.valueOf(userid));
+                 return   userService.findById(Long.valueOf(userid)).map(
+                           user -> {
+                               CustomUserDetails userDetails = new CustomUserDetails(user);
+                              return this.generateJWTToken(userDetails);
+                           }
+                   );
+
+               }
+                )
+                .orElseThrow(
+                ()->
+            new TokenRefreshException(tokenRefreshRequest.getRefreshToken(), "Couldn't find refresh token in Storage, Please login")
+
+        );
+
+//        refreshTokenService.getRefreshToken(tokenRefreshRequest.getRefreshToken()).map(
+//                (refreshToken->{
+//                    refreshTokenService.validateToken(refreshToken);
+//                    refreshTokenService.validateDeviceForToken(refreshToken,deviceInfo);
+//                    return refreshToken;
+//
+//                })
+//        ).map(token->{
+//            //add code to create new access jwt token
+//
+//                })
+//                .orElseThrow(()->
+//            new TokenRefreshException(tokenRefreshRequest.getRefreshToken(), "Couldn't find refresh token, Please login")
+//        );
 
     }
 

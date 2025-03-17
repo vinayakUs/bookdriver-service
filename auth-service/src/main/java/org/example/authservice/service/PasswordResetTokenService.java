@@ -7,8 +7,9 @@ import org.example.authservice.model.dto.PasswordResetRequestDto;
 import org.example.authservice.model.entity.PasswordResetToken;
 import org.example.authservice.model.entity.User;
 import org.example.authservice.repository.PasswordResetTokenRepository;
-import org.example.authservice.utils.Util;
+//import org.example.authservice.utils.Util;
 import lombok.RequiredArgsConstructor;
+import org.example.authservice.utils.Utils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -74,7 +75,7 @@ public class PasswordResetTokenService {
      * Helper function to create token associated to user
      */
     PasswordResetToken createTokenWithUser(User user) {
-        String tokenID = Util.generateRandomUuid();
+        String tokenID = Utils.generateRandomUuid();
         PasswordResetToken passwordResetToken = new PasswordResetToken();
         passwordResetToken.setExpiryDate(Instant.now().plusMillis(expiration));
         passwordResetToken.setClaimed(false);
