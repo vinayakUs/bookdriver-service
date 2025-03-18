@@ -1,19 +1,12 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import {provideRouter, withComponentInputBinding} from '@angular/router';
-
- import {provideHttpClient, withInterceptors} from '@angular/common/http';
-import {authInterceptor} from './auth.interceptor';
+import {provideHttpClient, withInterceptors} from '@angular/common/http';
 import {routes} from './app.routes';
-
-// export const appConfig: ApplicationConfig = {
-//   providers: [, provideRouter(routes),provideHttpClient()]
-// };
+import {authInterceptor} from './interceptor/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
-  providers: [
-    provideRouter(routes, withComponentInputBinding()),
-    provideHttpClient(
-      withInterceptors([authInterceptor])
-    )
+  providers: [provideRouter(routes) ,
+    provideHttpClient(withInterceptors([authInterceptor])) // ✅ Correctly register interceptor
+
   ]
 };

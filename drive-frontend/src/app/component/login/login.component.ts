@@ -1,56 +1,74 @@
-// app/login/login.component.ts
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { HttpErrorResponse } from '@angular/common/http';
-import { Router, RouterModule } from '@angular/router';
- import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import {AuthService} from '../../service/auth.service';
 
 @Component({
+  selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RouterModule],
-  templateUrl: './login.component.html'
+  imports: [CommonModule, ReactiveFormsModule],
+  styleUrls: ['./login.component.css'],
+  template: `
+      <h2>Login</h2>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <label for="email">Email:</label>
+        <input id="email" formControlName="email" type="email" required>
+
+        <label for="password">Password:</label>
+        <input id="password" formControlName="password" type="password" required>
+        <button type="submit" [disabled]="loginForm.invalid || isLoading">
+          <span *ngIf="!isLoading">Login</span>
+          <span *ngIf="isLoading" class="loading">
+      <span class="spinner"></span> Loading...
+    </span>
+        </button>
+
+<!--        <button type="submit">Login</button>-->
+      </form>
+  `
 })
 export class LoginComponent {
-  loginForm: FormGroup;
-  loginError: string = '';
+  isLoading = false;  // Loading state flag
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router
-  ) {
-    this.loginForm = this.fb.group({
-      email: ['radhikaandrew12@gmail.com', Validators.required],
-      // username: ['sa', Validators.required],
-      // type: ['', Validators.required],
-      password: ['sa', Validators.required],
-      driver: [false]
-    });
+  loginForm = new FormGroup({
+    email: new FormControl('sa@gmail.com'),
+    password: new FormControl('sa')
+  });
+
+  constructor(private authService: AuthService, private router: Router) {
+
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/home']); // Redirect to home if already logged in
+    }
+
   }
+  onSubmit() {
+    if (this.loginForm.valid && !this.isLoading) {
+      this.isLoading = true;
+      const credentials = {
+        email: this.loginForm.value.email!,
+        password: this.loginForm.value.password!,
+      };
 
-  onSubmit(): void {
-
-    // console.log(typeof ("sd".strip()));
-    if (this.loginForm.valid) {
-      const { email,driver, password } = this.loginForm.value;
-      this.authService.login(email,email.split('@',1)[0], driver?'DRIVER':'USER', password).subscribe({
-        next: () =>{
-          console.log("next login");
-          this.router.navigateByUrl('/dashboard').then(success => {
-            if (success) {
-              console.log("✅ Navigation successful!");
-            } else {
-              console.error("❌ Navigation failed!");
-            }
-          });
-          // return this.router.navigate(['/dashboard'])
+      this.authService.login(credentials).subscribe({
+        next: () => {
+          console.log('Login successful');
+          this.isLoading = false;
+          this.router.navigate(['/home']);
         },
-        error: (err: HttpErrorResponse) => {
-          this.loginError = err.error?.message || 'Login failed';
-          console.error('Login error:', err);
+        error: err => {
+          this.isLoading = false;
+          console.error('Login failed', err);
         }
       });
     }
   }
+
+  // onSubmit() {
+  //   if (this.loginForm.valid) {
+  //     console.log('Login successful', this.loginForm.value);
+  //     this.router.navigate(['/home']); // Change to your desired route
+  //   }
+  // }
 }

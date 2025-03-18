@@ -25,6 +25,7 @@ import {RouteService} from '../../service/route.service';
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
+
   constructor(private authService: AuthService,private sharedLocationService: SharedLocationService,private routeService:RouteService) {}
   onSubmit(event: Event) {
     event.preventDefault(); // Prevents page refresh

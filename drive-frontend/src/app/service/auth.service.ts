@@ -1,80 +1,90 @@
-// auth.service.ts
-import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import {Observable, BehaviorSubject, throwError, switchMap, catchError} from 'rxjs';
+import { tap } from 'rxjs/operators';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthService {
-  private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/api/auth/login';
+  private apiUrl = 'http://localhost:8080/api/auth';
+  private accessTokenKey = 'access_token';
+  private refreshTokenKey = 'refresh_token';
+  private isRefreshing = false;
 
-  login(email: string,username:string,type:string, password: string): Observable<{ accessToken: string, expiryDuration: number,refreshToken:string,refreshExpiryDuration:number }> {
-    return this.http.post<{  accessToken: string, expiryDuration: number,refreshToken:string,refreshExpiryDuration:number  }>(this.apiUrl, { email,username,type, password })
-      .pipe(
-        tap(response => {
-          return this.setSession(response.accessToken, response.expiryDuration , response.refreshToken,response.refreshExpiryDuration)
-          }
+  private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasToken());
+  isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
+  private refreshTokenSubject = new BehaviorSubject<string | null>(null);
 
-        )
-      );
+  constructor(private http: HttpClient, private router: Router) {}
+
+  login(credentials: { email: string; password: string }): Observable<any> {
+    return this.http.post<{ accessToken: string; refreshToken: string }>(
+      `${this.apiUrl}/login`, credentials
+    ).pipe(
+      tap(tokens => {
+        this.storeTokens(tokens.accessToken, tokens.refreshToken);
+      })
+    );
   }
 
-  private setSession(token: string, expiresIn: number,refresh_token:string,refresh_exp:number): void {
-    const expiresAt = Date.now() + (expiresIn * 1000);
-    localStorage.setItem('jwt_token', token);
-    localStorage.setItem('jwt_expires_at', expiresAt.toString());
-    localStorage.setItem('jwt_refresh_token', refresh_token);
-    localStorage.setItem('jwt_refresh_expiry_at' , refresh_exp.toString())
-
-    console.log('Stored values:', {
-      token: localStorage.getItem('jwt_token'),
-      expiresAt: localStorage.getItem('jwt_expires_at'),
-      jwt_refresh_token: localStorage.getItem('jwt_refresh_token'),
-      jwt_refresh_expiry_at: localStorage.getItem('jwt_refresh_expiry_at')
-    });
-
+  private storeTokens(accessToken: string, refreshToken: string) {
+    localStorage.setItem(this.accessTokenKey, accessToken);
+    localStorage.setItem(this.refreshTokenKey, refreshToken);
+    this.isAuthenticatedSubject.next(true);
   }
 
-  getToken(): string | null {
-    return localStorage.getItem('jwt_token');
+  logout() {
+    localStorage.removeItem(this.accessTokenKey);
+    localStorage.removeItem(this.refreshTokenKey);
+    this.isAuthenticatedSubject.next(false);
+    this.router.navigate(['/login']);
+  }
+
+  getAccessToken(): string | null {
+    return localStorage.getItem(this.accessTokenKey);
+  }
+
+  getRefreshToken(): string | null {
+    return localStorage.getItem(this.refreshTokenKey);
   }
   isLoggedIn(): boolean {
-    const token = this.getToken();
-    if (!token) {
-      console.error("🚫 No token found. User is not logged in.");
-      return false;
-    }
-
-    try {
-      // Decode the token
-      const payload = JSON.parse(atob(token.split('.')[1])); // Decode base64 payload
-      const expiresAt = payload.exp * 1000; // Convert to milliseconds
-
-      console.log(`🔍 Token Expiration Time: ${expiresAt}, Current Time: ${Date.now()}`);
-
-      if (Date.now() < expiresAt) {
-        console.log("✅ Token is valid. User is logged in.");
-        return true;
-      } else {
-        console.error("🚫 Token has expired. User is logged out.");
-        return false;
-      }
-    } catch (error) {
-      console.error("❌ Error decoding token:", error);
-      return false;
-    }
+    return !!localStorage.getItem(this.accessTokenKey); // Returns true if token exists
   }
 
-  // isLoggedIn(): boolean {
-  //   const expiration = localStorage.getItem('jwt_expires_at');
-  //   return expiration ? Date.now() < parseInt(expiration) : false;
-  // }
+  private hasToken(): boolean {
+    return !!localStorage.getItem(this.accessTokenKey);
+  }
 
+  refreshToken(): Observable<any> {
+    const refreshToken = this.getRefreshToken();
+    if (!refreshToken) {
+      this.logout();
+      return throwError(() => new Error('No refresh token available'));
+    }
 
-  logout(): void {
-    localStorage.removeItem('jwt_token');
-    localStorage.removeItem('jwt_expires_at');
-    localStorage.removeItem('jwt_refresh_expiry_at');
-    localStorage.removeItem('jwt_refresh_token');
+    if (this.isRefreshing) {
+      return this.refreshTokenSubject.pipe(
+        switchMap((newToken) => {
+          return newToken ? throwError(() => new Error('Token refreshed')) : throwError(() => new Error('Token refresh failed'));
+        })
+      );
+    }
+
+    this.isRefreshing = true;
+    return this.http.post<{ accessToken: string; refreshToken: string }>(
+      `${this.apiUrl}/refresh-token`, { refreshToken }
+    ).pipe(
+      tap(tokens => {
+        this.storeTokens(tokens.accessToken, tokens.refreshToken);
+        this.refreshTokenSubject.next(tokens.accessToken);
+      }),
+      catchError((error: HttpErrorResponse) => {
+        this.logout();
+        return throwError(() => new Error('Refresh token expired'));
+      }),
+      tap(() => this.isRefreshing = false)
+    );
   }
 }

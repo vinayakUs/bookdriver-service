@@ -7,9 +7,10 @@ import {provideHttpClient} from '@angular/common/http';
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet],
-  template: `
-    <router-outlet></router-outlet>
-  `,
+  template:'<router-outlet></router-outlet>',
+  styleUrl: './app.component.css'
+
+
 })
 
 export class AppComponent {
