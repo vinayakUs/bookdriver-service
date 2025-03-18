@@ -57,8 +57,13 @@ export class AuthService {
     const expiration = this.getTokenExpiration(token);
     return !!expiration && expiration > new Date();
 
+  }
+  isAccessTokenExpired(): boolean {
+    const token = localStorage.getItem(this.accessTokenKey);
+    if (!token) return true; // No token found
 
-
+    const expiration = this.getTokenExpiration(token);
+    return !expiration || expiration <= new Date(); // Token is expired if expiration is in the past
   }
 
   private hasToken(): boolean {
@@ -76,8 +81,29 @@ export class AuthService {
       return null;
     }
   }
+  // Parse the token and check if it's expired
+  isTokenExpired(token: string): boolean {
+    try {
+      // Split the token into its parts (header, payload, signature)
+      const payloadBase64 = token.split('.')[1];
+      if (!payloadBase64) {
+        throw new Error('Invalid token format');
+      }
 
+      // Decode the base64 payload
+      const payloadJson = atob(payloadBase64);
+      const payload = JSON.parse(payloadJson);
+
+      // Check the expiration time (exp is in seconds)
+      const currentTime = Date.now() / 1000; // Convert to seconds
+      return payload.exp < currentTime; // Token is expired if exp < current time
+    } catch (error) {
+      console.error('Error parsing token:', error);
+      return true; // Assume token is invalid if parsing fails
+    }
+  }
   refreshToken(): Observable<any> {
+    console.log(3)
     const refreshToken = this.getRefreshToken();
     if (!refreshToken) {
       this.logout();
@@ -93,12 +119,12 @@ export class AuthService {
     }
 
     this.isRefreshing = true;
-    return this.http.post<{ accessToken: string; refreshToken: string }>(
-      `${this.apiUrl}/refresh-token`, { refreshToken }
+    return this.http.post<{ refreshToken: string , accessToken:string }>(
+      `${this.apiUrl}/refresh`, { refreshToken }
     ).pipe(
-      tap(tokens => {
-        this.storeTokens(tokens.accessToken, tokens.refreshToken);
-        this.refreshTokenSubject.next(tokens.accessToken);
+      tap(response => {
+        this.storeTokens(response.accessToken,response.refreshToken);
+        this.refreshTokenSubject.next(response.accessToken);
       }),
       catchError((error: HttpErrorResponse) => {
         this.logout();

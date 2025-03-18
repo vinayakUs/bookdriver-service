@@ -9,9 +9,11 @@ export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: 
   let token = authService.getAccessToken();
 
   // ✅ Skip token for login & register requests
-  if (req.url.includes('/api/auth/login') || req.url.includes('/api/auth/register')) {
+  if (req.url.includes('/api/auth/login') || req.url.includes('/api/auth/register') ||  req.url.includes('/api/auth/refresh')) {
     return next(req);
   }
+
+
 
   // ✅ Attach token if available
   let clonedRequest = req;
@@ -23,10 +25,12 @@ export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: 
 
   return next(clonedRequest).pipe(
     catchError((error: HttpErrorResponse) => {
+      console.log(error)
       if (error.status === 401) { // Token expired
         return authService.refreshToken().pipe(
           switchMap(() => {
             token = authService.getAccessToken(); // Get new token after refresh
+
             if (token) {
               clonedRequest = req.clone({
                 setHeaders: { Authorization: `Bearer ${token}` }
