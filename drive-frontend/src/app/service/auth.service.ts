@@ -50,11 +50,31 @@ export class AuthService {
     return localStorage.getItem(this.refreshTokenKey);
   }
   isLoggedIn(): boolean {
-    return !!localStorage.getItem(this.accessTokenKey); // Returns true if token exists
+    const token = localStorage.getItem(this.accessTokenKey); // Returns true if token exists
+     // = this.getToken();
+    if (!token) return false;
+
+    const expiration = this.getTokenExpiration(token);
+    return !!expiration && expiration > new Date();
+
+
+
   }
 
   private hasToken(): boolean {
     return !!localStorage.getItem(this.accessTokenKey);
+  }
+  // Get token expiration date
+  private getTokenExpiration(token: string): Date | null {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      if (payload.exp) {
+        return new Date(payload.exp * 1000); // Convert to milliseconds
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
   }
 
   refreshToken(): Observable<any> {
