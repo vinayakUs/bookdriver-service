@@ -1,0 +1,222 @@
+{
+	"info": {
+		"_postman_id": "6406b461-1c47-4b90-93b6-e263518925d3",
+		"name": "BookDriver",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22401963"
+	},
+	"item": [
+		{
+			"name": "tripservice",
+			"item": []
+		},
+		{
+			"name": "locationservice",
+			"item": [
+				{
+					"name": "route",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"destinationLocation\":{\r\n        \"lat\":\"18.709647\",  \r\n        \"lng\":\"73.643105\", \r\n        \"type\":\"DESTINATION\" \r\n    },\r\n    \"pickupLocation\":{\r\n        \"lat\":\"-19.459811\",    \r\n\r\n        \"lng\":\"46.908354\",\r\n        \"type\":\"PICKUP\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/navigation/route",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"navigation",
+								"route"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "authservice",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"sa\",\r\n  \"email\": \"radhikaandrew12@gmail.com\",\r\n  \"password\": \"sa\",\r\n  \"registerAsAdmin\": \"true\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "checkUsernameInUse",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8088/api/auth/checkUsernameInUse?username=sa",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"auth",
+								"checkUsernameInUse"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "sa"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "registrationConfirmation",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8088/api/auth/registrationConfirmation?token=c6ae016b-2982-4a06-b0a2-35eb25e0a11e",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"auth",
+								"registrationConfirmation"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "c6ae016b-2982-4a06-b0a2-35eb25e0a11e"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"sa\",\r\n    \"email\":\"radhikaandrew12@gmail.com\",\r\n    \"password\":\"sa\" \r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "resetlink",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"radhikaandrew12@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/auth/password/resetlink",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"auth",
+								"password",
+								"resetlink"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -1,9 +1,21 @@
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
 spring:
+  cache:
+    jcache:
+      config: classpath:ehCache.xml
+    type: jcache
+
   application:
     name: location-service
+
 server:
   port: 8083
+#  spring.cache.type=
+#  spring.cache.ehcache.config=classpath:ehcache.xml
+
+
+
+app:
+  apis:
+    google:
+      maps:
+        key: ${GOOGLE_API_KEY}

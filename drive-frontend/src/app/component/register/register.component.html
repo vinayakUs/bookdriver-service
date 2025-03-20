@@ -1,0 +1,84 @@
+<div class="min-h-screen flex items-center justify-center bg-white py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-lg border border-gray-200">
+    <div>
+      <div class="w-12 h-12 mx-auto bg-gray-100 rounded-lg flex items-center justify-center">
+        <svg class="w-8 h-8 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+        </svg>
+      </div>
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign up for account</h2>
+      <p class="mt-2 text-center text-sm text-gray-600">Welcome ! Please enter your details.</p>
+    </div>
+    <form class="mt-8 space-y-6">
+      <div class="rounded-md space-y-4">
+        <div>
+          <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+          <input id="name" name="name" type="text" required class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 bg-white placeholder-gray-400 text-gray-900 rounded-md focus:outline-none focus:ring-gray-500 focus:border-gray-500 focus:z-10 sm:text-sm" placeholder="Enter your Name">
+        </div>
+
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+          <input id="email" name="email" type="email" required class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 bg-white placeholder-gray-400 text-gray-900 rounded-md focus:outline-none focus:ring-gray-500 focus:border-gray-500 focus:z-10 sm:text-sm" placeholder="Enter your email">
+        </div>
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+          <input id="password" name="password" type="password" required class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 bg-white placeholder-gray-400 text-gray-900 rounded-md focus:outline-none focus:ring-gray-500 focus:border-gray-500 focus:z-10 sm:text-sm" placeholder="Enter your password">
+        </div>
+      </div>
+
+<!--      <div class="flex items-center justify-between">-->
+<!--        <div class="flex items-center">-->
+<!--          <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-gray-600 focus:ring-gray-500 border-gray-300 rounded bg-white">-->
+<!--          <label for="remember-me" class="ml-2 block text-sm text-gray-300">Remember me</label>-->
+<!--        </div>-->
+<!--        <div class="text-sm">-->
+<!--          <a href="#" class="font-medium text-gray-300 hover:text-white">Forgot password?</a>-->
+<!--        </div>-->
+<!--      </div>-->
+
+      <div>
+        <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700">
+
+          <span *ngIf="!isRegistering; else other_span2 " >Register </span>
+          <ng-template #other_span2>
+            <span>Loading</span>
+          </ng-template>
+          <div *ngIf="isRegistering" class="spinner ml-2"></div>
+
+
+
+
+        </button>
+
+
+
+
+      </div>
+
+      <div class="mt-6">
+        <div class="relative">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-gray-600"></div>
+          </div>
+          <div class="relative flex justify-center text-sm">
+            <span class="px-2 bg-white text-gray-600">Or continue with</span>
+          </div>
+        </div>
+
+        <div class="mt-6">
+          <button type="button" class="w-full flex items-center justify-center px-4 py-2 border border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-300 bg-gray-700 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700">
+            <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24">
+              <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z" fill="currentColor"/>
+            </svg>
+            Sign in with Google
+          </button>
+        </div>
+      </div>
+
+      <p class="mt-4 text-center text-sm text-gray-500">
+        Already have an account?
+        <a href="#" class="font-medium text-gray-300 hover:text-white">Log in</a>
+      </p>
+    </form>
+  </div>
+</div>

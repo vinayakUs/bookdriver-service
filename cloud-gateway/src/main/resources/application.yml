@@ -1,0 +1,21 @@
+#spring.application.name=
+#spring.main.web-application-type=reactive
+#
+
+server:
+  port: 8080
+
+spring:
+  main:
+    web-application-type: reactive
+  application:
+    name: cloud-gateway
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:4200"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+            allowCredentials: true

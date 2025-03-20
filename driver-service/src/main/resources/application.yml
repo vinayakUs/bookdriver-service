@@ -1,0 +1,76 @@
+
+spring:
+  application:
+    name: driver-service
+
+  graphql:
+    graphiql:
+      path: /graphiql
+  kafka:
+    bootstrap-servers: pkc-619z3.us-east1.gcp.confluent.cloud:9092
+    properties:
+      security:
+        protocol: SASL_SSL
+      sasl:
+        jaas:
+          config: org.apache.kafka.common.security.plain.PlainLoginModule required username='QOAYABDEKG56I3HL' password='NauUMCZB5xwQ+RQvooQj2SZ1ZCxeni4Ye4jFpJL08kuN5vsH3J7rw0CwmrcJsdAY';
+        mechanism: PLAIN
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      properties:
+
+        spring:
+          json:
+            value:
+              default:
+                type: org.example.driverservice.TripRequest
+            trusted:
+              packages: "*"  # Allows deserialization even if package names differ
+            use:
+              type:
+                headers: false  # Prevents deserializer from looking for class type
+
+      group-id: driver-service
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+#      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  data:
+    redis:
+      #      port: 19507
+      #      host: redis-19507.c277.us-east-1-3.ec2.redns.redis-cloud.com
+      password: nE8GGRHl9OVCkJIcdFel5WcslHn6bDh2
+      username: default
+      host: localhost
+      port: 6379
+#  redis-cli -u :19507
+
+
+#  kafka:
+#    bootstrap-servers: pkc-619z3.us-east1.gcp.confluent.cloud:9092
+#    properties:
+#      sasl.mechanism: PLAIN
+#      security.protocol: SASL_SSL
+#      sasl.jaas.config: >
+#        org.apache.kafka.common.security.plain.PlainLoginModule required
+#        username="QOAYABDEKG56I3HL"
+#        password="NauUMCZB5xwQ+RQvooQj2SZ1ZCxeni4Ye4jFpJL08kuN5vsH3J7rw0CwmrcJsdAY";
+#      session.timeout.ms: 45000
+#    client-id: ccloud-springboot-client-f799713b-cc8a-401f-ad62-cad4c63430f9
+#    producer:
+#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer: org.springframework.kafka.support.serializer.JsonDeserializer
+#    consumer:
+#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+#      group-id: your-consumer-group
+
+
+app:
+  event:
+    trip:
+      requested : 'TRIP_REQUEST_EVENT'
+server:
+  port: 8088

@@ -1,0 +1,37 @@
+
+<div class="flex h-screen">
+  <!-- Left Section (40%) -->
+  <div class="w-2/5 p-4 bg-gray-100 flex flex-col gap-6">
+    <form (ngSubmit)="onSubmit($event)" class="flex flex-col gap-4">
+      <!-- Input Fields with Controlled Width -->
+      <div class="w-80">
+        <app-location-search type="PICKUP"></app-location-search>
+      </div>
+      <div class="w-80">
+        <app-location-search type="DESTINATION"></app-location-search>
+      </div>
+
+      <!-- Smaller Button with "Book Ride" -->
+      <div>
+        <button
+          class="w-28 py-1.5 rounded-md border border-transparent flex items-center justify-center text-sm
+                 text-white bg-slate-800 hover:bg-slate-700 hover:bg-opacity-90 focus:bg-slate-700
+                 active:bg-slate-900 shadow-md transition-all"
+          type="submit"
+        >
+          Book Ride
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 ml-1">
+            <path fill-rule="evenodd" d="M16.72 7.72a.75.75 0 0 1 1.06 0l3.75 3.75a.75.75 0 0 1 0 1.06l-3.75 3.75a.75.75 0 1 1-1.06-1.06l2.47-2.47H3a.75.75 0 0 1 0-1.5h16.19l-2.47-2.47a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+          </svg>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Right Section (60%) -->
+  <div class="w-3/5 h-full">
+    <app-map class="w-full h-full"></app-map>
+  </div>
+</div>
+
+
