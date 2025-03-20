@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -134,10 +135,23 @@ public class AuthService {
     /**
      * Authenticate user and log them in given a loginRequest
      */
+//    public Optional<Authentication> authenticateUser(LoginRequestDto loginRequestdDto) {
+//        return Optional.ofNullable(
+//                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+//                        loginRequestdDto.getEmail(), loginRequestdDto.getPassword())));
+//    }
     public Optional<Authentication> authenticateUser(LoginRequestDto loginRequestdDto) {
-        return Optional.ofNullable(
-                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                        loginRequestdDto.getEmail(), loginRequestdDto.getPassword())));
+        try{
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    loginRequestdDto.getEmail(), loginRequestdDto.getPassword()));
+            return Optional.ofNullable(authentication);
+        }catch (AuthenticationException ex){
+             return Optional.empty(); // Prevents the exception from propagating immediately
+
+        }
+//        return Optional.ofNullable(
+//                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+//                        loginRequestdDto.getEmail(), loginRequestdDto.getPassword())));
     }
 
  

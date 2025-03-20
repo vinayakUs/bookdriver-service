@@ -17,7 +17,7 @@ import {AuthService} from '../../service/auth.service';
   styleUrl: './register.component.css'
 })
 export class RegisterComponent {
-  isRegistering: boolean = true;
+  isRegistering: boolean = false;
 
   constructor(private http: HttpClient, private router: Router,private authService: AuthService) {
     console.log("logged in",this.authService.isLoggedIn());

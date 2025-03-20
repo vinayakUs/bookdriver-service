@@ -25,9 +25,32 @@ export class AuthService {
     ).pipe(
       tap(tokens => {
         this.storeTokens(tokens.accessToken, tokens.refreshToken);
-      })
+      }
+      )
     );
   }
+// {
+//   "username": "sa",
+//   "email": "radhikaandrew12@gmail.com",
+//   "password": "sa",
+//   "registerAsAdmin": "true"
+// }
+  register(data:{username:string,email:string,password:string,registerAsAdmin:boolean}):Observable<any>{
+
+    return this.http.post<{}>(
+      `${this.apiUrl}/register`, data
+    ).pipe(
+      tap(value => {
+
+      })
+    )
+  }
+
+
+
+
+
+
 
   private storeTokens(accessToken: string, refreshToken: string) {
     localStorage.setItem(this.accessTokenKey, accessToken);

@@ -170,7 +170,7 @@ public class AuthController {
 
 
         Authentication authentication = authService.authenticateUser(loginRequestDto).orElseThrow(
-                () -> new UserLoginException("Couldn't login user [" + loginRequestDto + "]"));
+                () -> new UserLoginException("Couldn't login user [" + loginRequestDto.getEmail() + "]"));
 
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
