@@ -13,11 +13,11 @@
       <div class="rounded-md space-y-4">
         <div>
           <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-          <input id="email" name="email" type="email" required class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 bg-white placeholder-gray-400 text-gray-900 rounded-md focus:outline-none focus:ring-gray-500 focus:border-gray-500 focus:z-10 sm:text-sm" placeholder="Enter your email">
+          <input id="email" formControlName="email" name="email" type="email" required class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 bg-white placeholder-gray-400 text-gray-900 rounded-md focus:outline-none focus:ring-gray-500 focus:border-gray-500 focus:z-10 sm:text-sm" placeholder="Enter your email">
         </div>
         <div>
           <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-          <input id="password" name="password" type="password" required class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 bg-white placeholder-gray-400 text-gray-900 rounded-md focus:outline-none focus:ring-gray-500 focus:border-gray-500 focus:z-10 sm:text-sm" placeholder="Enter your password">
+          <input id="password" formControlName="password" name="password" type="password" required class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 bg-white placeholder-gray-400 text-gray-900 rounded-md focus:outline-none focus:ring-gray-500 focus:border-gray-500 focus:z-10 sm:text-sm" placeholder="Enter your password">
         </div>
       </div>
 
@@ -33,7 +33,15 @@
 
       <div>
         <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700">
-          Sign in
+
+
+          <span *ngIf="!isLoading; else other_span " >Sign in </span>
+          <ng-template #other_span>
+            <span>Loading</span>
+          </ng-template>
+          <div *ngIf="isLoading" class="spinner ml-2"></div>
+
+
         </button>
       </div>
 
@@ -59,7 +67,7 @@
 
       <p class="mt-4 text-center text-sm text-gray-500">
         Don't have an account?
-        <a href="#" class="font-medium text-gray-300 hover:text-white">Sign up</a>
+        <a href="/register" class="font-medium text-gray-300 hover:text-white">Sign up</a>
       </p>
     </form>
   </div>

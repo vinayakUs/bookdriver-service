@@ -38,8 +38,21 @@
 
       <div>
         <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700">
-          Register
+
+          <span *ngIf="!isRegistering; else other_span2 " >Register </span>
+          <ng-template #other_span2>
+            <span>Loading</span>
+          </ng-template>
+          <div *ngIf="isRegistering" class="spinner ml-2"></div>
+
+
+
+
         </button>
+
+
+
+
       </div>
 
       <div class="mt-6">
