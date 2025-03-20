@@ -8,8 +8,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="eureka-service" />
-        <module name="cloud-gateway" />
         <module name="auth-service" />
+        <module name="cloud-gateway" />
       </profile>
       <profile name="Annotation profile for location-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />

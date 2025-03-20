@@ -3,12 +3,13 @@ import { Router } from '@angular/router';
 import {Observable, BehaviorSubject, throwError, switchMap, catchError} from 'rxjs';
 import { tap } from 'rxjs/operators';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {environment} from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/api/auth';
+  private apiUrl = environment.authApiUrl;
   private accessTokenKey = 'access_token';
   private refreshTokenKey = 'refresh_token';
   private isRefreshing = false;
@@ -27,6 +28,32 @@ export class AuthService {
         this.storeTokens(tokens.accessToken, tokens.refreshToken);
       })
     );
+  }
+
+  register(request:{
+    username:string,
+    email:string,
+    password:string,
+    registerAsAdmin:boolean
+  }): Observable<any> {
+    return this.http.post<{success:boolean}>(
+        `${this.apiUrl}/register`,
+        request
+    ).pipe(
+        tap({
+          next: (result) => {
+            return result.success;
+          },
+          error: err => {console.log('from service'+err.error.message);},
+          complete: () => {console.log('complete')}
+            }
+        )
+    )
+
+  }
+
+  private handleRegisterError(error: HttpErrorResponse) {
+
   }
 
   private storeTokens(accessToken: string, refreshToken: string) {
