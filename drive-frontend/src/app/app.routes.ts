@@ -9,6 +9,7 @@ import { ResetComponent } from './component/reset/reset.component';
 import { MailsendComponent } from './component/mailsend/mailsend.component';
 import { ResetsuccessComponent } from './component/resetsuccess/resetsuccess.component';
 import { ForgotPasswordComponent } from './component/forgotPassword/forgotPassword.component';
+import {NotFoundComponent} from './component/not-found/not-found.component';
 
 // export const routes: Routes = [
 //   { path: 'login', component: LoginComponent },
@@ -32,9 +33,11 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'reset-password', component: ResetComponent },
   { path: 'forgot-password/send', component: MailsendComponent },
-  { path: 'resetSuccess', component: ResetsuccessComponent },
+  { path: 'reset-password/success', component: ResetsuccessComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: '404', component: NotFoundComponent },
 
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: '**', redirectTo: '/login' }
+
 ];

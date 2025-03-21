@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormControl} from '@angular/forms';
 import { CommonModule } from '@angular/common';
-  import {ActivatedRoute} from '@angular/router';
+  import {ActivatedRoute, Route, Router} from '@angular/router';
 import {AuthService} from '../../service/auth.service';
 import {MessageService} from 'primeng/api';
 
@@ -16,7 +16,7 @@ export class ResetComponent implements OnInit {
   resetForm: FormGroup;
   isLoading = false;
 
-  constructor(private fb: FormBuilder, private route:ActivatedRoute, private authService:AuthService, private messageService:MessageService) {
+  constructor(private fb: FormBuilder,private router:Router,private route:ActivatedRoute, private authService:AuthService, private messageService:MessageService) {
     this.resetForm = this.fb.group({
 
       email:  new FormControl(),
@@ -36,8 +36,9 @@ export class ResetComponent implements OnInit {
       }
       this.authService.resetPassword(data).subscribe(
         {
-          next: () => {
+          next: (response) => {
             this.isLoading = false;
+            this.router.navigate(['/reset-password/success']);
           },
           error: err => {
 
@@ -69,8 +70,12 @@ export class ResetComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      console.log(params['token']+'token..............');
+      console.log("token", params['token']);
+      if(params['token']==null||params['token']=='') {
+        this.router.navigate(['/404']).then(r => console.log("redirected to success"+r)); // Redirect to home or error page
+      }
       this.token = params['token'];
+
     })
   }
 }

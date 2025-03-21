@@ -53,9 +53,9 @@ export class AuthService {
   }
 
 
-  resetPassword(data:{email:string,password:string,confirmPassword:string,token:string}):Observable<any>{
-    console.log(data);
-return     this.http.post<{success:boolean}>(
+  resetPassword(data:{email:string,password:string,confirmPassword:string,token:string}):Observable<{data:string,success:boolean}>{
+    // console.log(data);
+return     this.http.post<{data:string,success:boolean}>(
       `${this.apiUrl}/password/reset`, data
     ).pipe(
       tap(value => {
