@@ -13,6 +13,7 @@ export class MailsendComponent  implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
+      console.log(params['email']+'email................');
       this.email = params['email'];
     })
   }

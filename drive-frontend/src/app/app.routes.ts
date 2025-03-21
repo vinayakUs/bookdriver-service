@@ -30,7 +30,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'reset', component: ResetComponent },
-  { path: 'send/:email', component: MailsendComponent },
+  { path: 'send', component: MailsendComponent },
   { path: 'resetSuccess', component: ResetsuccessComponent },
 
   { path: '', redirectTo: '/login', pathMatch: 'full' },
