@@ -29,19 +29,37 @@ export class AuthService {
       )
     );
   }
-// {
-//   "username": "sa",
-//   "email": "radhikaandrew12@gmail.com",
-//   "password": "sa",
-//   "registerAsAdmin": "true"
-// }
-  register(data:{username:string,email:string,password:string,registerAsAdmin:boolean}):Observable<any>{
 
-    return this.http.post<{}>(
+  register(data:{username:string,email:string,password:string,registerAsAdmin:boolean}):Observable<{ data:string,success:boolean }>{
+
+    return this.http.post<{data:string,success:boolean}>(
       `${this.apiUrl}/register`, data
     ).pipe(
       tap(value => {
+      })
+    )
+  }
 
+
+  sendPasswordResetMail(data:{email:string}):Observable<{data:string,success:boolean}>{
+
+    return this.http.post<{data:string,success:boolean}>(
+      `${this.apiUrl}/password/resetlink`, data
+    ).pipe(
+      tap(value => {
+        console.log("value=="+ JSON.stringify(value));
+      })
+    )
+  }
+
+
+  resetPassword(data:{email:string,password:string,confirmPassword:string,token:string}):Observable<any>{
+    console.log(data);
+return     this.http.post<{success:boolean}>(
+      `${this.apiUrl}/password/reset`, data
+    ).pipe(
+      tap(value => {
+        console.log("value=="+ JSON.stringify(value));
       })
     )
   }

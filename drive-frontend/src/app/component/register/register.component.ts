@@ -47,11 +47,9 @@ export class RegisterComponent {
       this.authService.register(data).subscribe(
           {
             next: r => {
-              console.log("successfully registered");
+              console.log(`successfully registered data [${r.data}] success [${r.success}]`);
               this.isRegistering = false;
-              this.router.navigate(['/destination'], { queryParams: { id: 123, name: 'John' } });
-
-              this.router.navigate(['/send'],{queryParams:{email:data.email}}).then(r =>
+              this.router.navigate(['/send'],{queryParams:{email:data.email},replaceUrl:true}).then(r =>
               console.log("successfully redirected to send", r)
               );
             },

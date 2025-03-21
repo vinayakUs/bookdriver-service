@@ -8,6 +8,7 @@ import {RegisterComponent} from './component/register/register.component';
 import { ResetComponent } from './component/reset/reset.component';
 import { MailsendComponent } from './component/mailsend/mailsend.component';
 import { ResetsuccessComponent } from './component/resetsuccess/resetsuccess.component';
+import { ForgotPasswordComponent } from './component/forgotPassword/forgotPassword.component';
 
 // export const routes: Routes = [
 //   { path: 'login', component: LoginComponent },
@@ -29,9 +30,10 @@ export const routes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [authGuard] }, // Protected
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'reset', component: ResetComponent },
-  { path: 'send', component: MailsendComponent },
+  { path: 'reset-password', component: ResetComponent },
+  { path: 'forgot-password/send', component: MailsendComponent },
   { path: 'resetSuccess', component: ResetsuccessComponent },
+  { path: 'forgot-password', component: ForgotPasswordComponent },
 
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: '**', redirectTo: '/login' }
