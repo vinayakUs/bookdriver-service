@@ -65,6 +65,13 @@ return     this.http.post<{data:string,success:boolean}>(
   }
 
 
+  verifyUserAccount(data:{token:string}):Observable<{ data:string,success:boolean}>{
+    return this.http.get<{data:string,success:boolean}>(`${this.apiUrl}/registrationConfirmation`+`?token=${data.token}`).pipe(
+      tap(value => {
+        console.log("value=="+ JSON.stringify(value));
+      })
+    )
+  }
 
 
 

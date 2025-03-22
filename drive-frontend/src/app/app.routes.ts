@@ -10,6 +10,7 @@ import { MailsendComponent } from './component/mailsend/mailsend.component';
 import { ResetsuccessComponent } from './component/resetsuccess/resetsuccess.component';
 import { ForgotPasswordComponent } from './component/forgotPassword/forgotPassword.component';
 import {NotFoundComponent} from './component/not-found/not-found.component';
+import {VerifyEmailComponent} from './component/verify-email/verify-email.component';
 
 // export const routes: Routes = [
 //   { path: 'login', component: LoginComponent },
@@ -35,6 +36,7 @@ export const routes: Routes = [
   { path: 'forgot-password/send', component: MailsendComponent },
   { path: 'reset-password/success', component: ResetsuccessComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: 'verify-email', component: VerifyEmailComponent },
   { path: '404', component: NotFoundComponent },
 
   { path: '', redirectTo: '/login', pathMatch: 'full' },
