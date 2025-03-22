@@ -12,7 +12,7 @@ import {Toast} from 'primeng/toast';
   // styleUrls: [],
   styleUrl:'login.component.css',
   standalone: true,
-  imports: [FormsModule, CommonModule, ReactiveFormsModule, Toast]
+  imports: [FormsModule, CommonModule, ReactiveFormsModule ]
 })
 export class LoginComponent {
   isLoading: boolean = false;
@@ -38,31 +38,24 @@ export class LoginComponent {
       };
 
       this.authService.login(credentials).subscribe({
-        next: () => {
+        next: nex => {
           console.log('Login successful');
           this.isLoading = false;
           this.router.navigate(['/home']);
         },
         error: err => {
-          console.log(err.er)
-
+          console.error('Login failed', err);
 
           // Extract error details
           const errorResponse = err.error;
           const success = errorResponse?.success ?? false;
           const message = errorResponse?.data ?? 'An unexpected error occurred';
-
-          console.error('Login failed', err);
-
-          // Show error message using PrimeNG Toast
           this.messageService.add({
             severity: success ? 'success' : 'error',
             summary: 'Login Failed',
             detail: message
           });
-
           this.isLoading = false;
-          console.error('Login failed', err);
         }
       });
     }

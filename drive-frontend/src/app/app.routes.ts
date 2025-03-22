@@ -8,6 +8,9 @@ import {RegisterComponent} from './component/register/register.component';
 import { ResetComponent } from './component/reset/reset.component';
 import { MailsendComponent } from './component/mailsend/mailsend.component';
 import { ResetsuccessComponent } from './component/resetsuccess/resetsuccess.component';
+import { ForgotPasswordComponent } from './component/forgotPassword/forgotPassword.component';
+import {NotFoundComponent} from './component/not-found/not-found.component';
+import {VerifyEmailComponent} from './component/verify-email/verify-email.component';
 
 // export const routes: Routes = [
 //   { path: 'login', component: LoginComponent },
@@ -29,10 +32,14 @@ export const routes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [authGuard] }, // Protected
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'reset', component: ResetComponent },
-  { path: 'send', component: MailsendComponent },
-  { path: 'resetSuccess', component: ResetsuccessComponent },
+  { path: 'reset-password', component: ResetComponent },
+  { path: 'forgot-password/send', component: MailsendComponent },
+  { path: 'reset-password/success', component: ResetsuccessComponent },
+  { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: 'verify-email', component: VerifyEmailComponent },
+  { path: '404', component: NotFoundComponent },
 
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: '**', redirectTo: '/login' }
+
 ];

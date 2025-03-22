@@ -1,0 +1,40 @@
+<div class="min-h-screen flex items-center justify-center bg-white py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-lg border border-gray-200">
+    <div>
+      <div class="w-12 h-12 mx-auto bg-gray-100 rounded-lg flex items-center justify-center">
+        <svg class="w-8 h-8 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+        </svg>
+      </div>
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Verify Your Email</h2>
+      <p class="mt-2 text-center text-sm text-gray-600">Please confirm if this is your email address</p>
+<!--      <p class="mt-2 text-center text-lg font-medium text-gray-800">{{}}</p>-->
+    </div>
+
+    <div *ngIf="isVerified; else verify_email_122xcd">
+      <div class="mt-8 space-y-6">
+
+        <button class="w-full flex-1 group relative flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700">
+          <span  >Email verified Successfully</span>
+
+        </button>
+      </div>
+
+
+    </div>
+
+    <ng-template #verify_email_122xcd>
+      <div class="mt-8 space-y-6">
+        <div class="flex gap-4">
+          <button (click)="onVerify(true)" class="flex-1 group relative flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700">
+            <span *ngIf="!isLoading">Yes, verify my email</span>
+            <div *ngIf="isLoading" class="spinner ml-2"></div>
+          </button>
+          <button class="flex-1 py-2 px-4 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+            No, not my email
+          </button>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>
