@@ -23,7 +23,8 @@ public class Config {
                         .uri("http://localhost:8088"))
                 .route("location-service", r -> r.path("/api/**")
                         .uri("http://localhost:8083"))
-
+//trip service
+//                .route("trip-service", r-> )
                 .build();
     }
     @Bean

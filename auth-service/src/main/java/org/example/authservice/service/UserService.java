@@ -24,7 +24,7 @@ public class UserService {
     /**
      * Check is the user exists given the email: naturalId
      */
-    public Boolean existsByEmail(String email) {
+    public Boolean  existsByEmail(String email) {
         return userRepository.existsByEmail(email);
     }
 

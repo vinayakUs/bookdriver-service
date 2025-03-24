@@ -5,3 +5,6 @@ docker run -d --name redis-stack -p 6379:6379 -p 8001:8001 redis/redis-stack:lat
 Docker Confluent Build:
 wget https://raw.githubusercontent.com/confluentinc/cp-all-in-one/7.9.0-post/cp-all-in-one-kraft/docker-compose.yml
 docker compose up -d
+
+Sonarqube
+docker run -d --name sonarqube -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true -p 9000:9000 sonarqube:latest
