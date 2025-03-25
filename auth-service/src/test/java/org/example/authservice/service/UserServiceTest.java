@@ -1,6 +1,5 @@
 package org.example.authservice.service;
 
-import jakarta.validation.constraints.AssertTrue;
 import org.example.authservice.model.RoleName;
 import org.example.authservice.model.dto.RegistrationRequestDto;
 import org.example.authservice.model.entity.Role;
@@ -8,19 +7,14 @@ import org.example.authservice.model.entity.User;
 import org.example.authservice.repository.RoleRepository;
 import org.example.authservice.repository.UserRepository;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -37,7 +31,6 @@ public class UserServiceTest {
 
 
     @InjectMocks
-    @Spy
     private UserService userService;
 
     @Test
@@ -101,33 +94,30 @@ public class UserServiceTest {
         verify(userRepository).findById(1L);
     }
     @Test
-    void testCreateUser() {
-        // Mock input
-        RegistrationRequestDto registerRequest = new RegistrationRequestDto();
-        registerRequest.setEmail("test@example.com");
-        registerRequest.setPassword("password123");
-        registerRequest.setUsername("testUser");
-        registerRequest.setRegisterAsAdmin(true);
+    void testCreateUser_AsUser() {
+        RegistrationRequestDto request = new RegistrationRequestDto();
+        request.setEmail("user@example.com");
+        request.setUsername("regularUser");
+        request.setPassword("password");
+        request.setRegisterAsAdmin(false);
 
-        // Mock behavior
-        when(encoder.encode("password123")).thenReturn("encodedPassword");
-        when(userService.getRolesForNewUser(true)).thenReturn(Set.of(new Role("ROLE_ADMIN")));
+        when(encoder.encode(anyString())).thenReturn("encodedPassword");
+        Role user = new Role(RoleName.ROLE_USER);
+        Role admin = new Role(RoleName.ROLE_ADMIN);
 
-        doReturn(Set.of(new Role(RoleName.ROLE_ADMIN))).when(userService).get
-        // Execute method
-        User newUser = userService.createUser(registerRequest);
+        when(roleService.findAll()).thenReturn(Set.of(user,admin));
 
-        // Verify results
-        assertNotNull(newUser);
-        assertEquals("test@example.com", newUser.getEmail());
-        assertEquals("encodedPassword", newUser.getPassword()); // Ensure password is encoded
-        assertEquals("testUser", newUser.getUsername());
-        assertTrue(newUser.getActive());
-        assertFalse(newUser.getEmailVerified());
-        assertTrue(newUser.getRoles().stream().anyMatch(role -> role.getName().equals("ROLE_ADMIN")));
+        User createdUser = userService.createUser(request);
 
-        // Verify method calls
-//        verify(encoder, times(1)).encode("password123");
-//        verify(userService, times(1)).getRolesForNewUser(true);
+        assertNotNull(createdUser);
+        assertEquals("user@example.com", createdUser.getEmail());
+        assertEquals("encodedPassword", createdUser.getPassword());
+        assertEquals(createdUser.getRoles(), Set.of(user));
+        assertFalse(createdUser.getRoles().contains(admin)); // Should not have admin role
+        assertTrue(createdUser.getRoles().contains(user));
+        assertTrue(createdUser.getActive());
+
+        verify(encoder, times(1)).encode("password");
+        verify(roleService, times(1)).findAll();
     }
 }
