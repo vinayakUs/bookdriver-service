@@ -4,7 +4,9 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.example.tripservice.CustomJacksonHashMapper;
 import org.example.tripservice.TripRequest;
+import org.example.tripservice.TripRequestRepository;
 import org.example.tripservice.dto.TripResponseDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.hash.Jackson2HashMapper;
@@ -23,6 +25,8 @@ public class TripService {
     private final Jackson2HashMapper jackson2HashMapper;
     private HashOperations<String, String, Object> hashOperations;
     private final CustomJacksonHashMapper<TripRequest> customJacksonHashMapper;
+    @Autowired
+    private  TripRequestRepository tripRequestRepository;
 
 
 
@@ -43,12 +47,16 @@ public class TripService {
                 .build();
 
 
+
+
+
         // Convert to Hash and store
-        Map<String, Object> tripData = jackson2HashMapper.toHash(request);
-
-        Map<String,Object> m = customJacksonHashMapper.toHash(request);
-
-        hashOperations.putAll("KEY_TRIP:" + tripId, m);
+//
+//        Map<String, Object> tripData = jackson2HashMapper.toHash(request);
+//
+//        Map<String,Object> m = customJacksonHashMapper.toHash(request);
+//
+//        hashOperations.putAll("KEY_TRIP:" + tripId, m);
 
         kafkaProducerService.publishTripEvent(request,tripId);
 

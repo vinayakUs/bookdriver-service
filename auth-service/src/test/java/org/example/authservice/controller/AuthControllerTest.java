@@ -67,7 +67,7 @@ public class AuthControllerTest {
 
         when(userDetails.getUsername()).thenReturn(email);
         when(authentication.getPrincipal()).thenReturn(userDetails);
-        when(authService.authenticateUser(any(LoginRequestDto.class))).thenReturn(Optional.of(authentication));
+        when(authService.authenticateUser(any(LoginRequestDto.class))).thenReturn(Optional.empty());
         when(authService.createRefreshToken(eq(authentication), any())).thenReturn(Optional.of(refreshToken));
         when(authService.generateJWTToken(userDetails)).thenReturn(jwtToken);
         when(tokenProvider.getExpiryDuration()).thenReturn(expiryDuration);
@@ -79,7 +79,7 @@ public class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("User-Agent", "Test-Agent")
                         .content(new ObjectMapper().writeValueAsString(loginRequestDto)))
-                .andExpect(status().isOk())
+                .andExpect(status().is4xxClientError())
 ;
         verify(authService, times(1)).authenticateUser(any(LoginRequestDto.class));
     }
