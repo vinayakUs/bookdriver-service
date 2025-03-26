@@ -1,64 +1,51 @@
 package org.example.tripservice.config;
 
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.example.tripservice.CustomJacksonHashMapper;
-import org.example.tripservice.TripRequest;
+import com.redis.lettucemod.RedisModulesClient;
+import com.redis.lettucemod.api.StatefulRedisModulesConnection;
+import io.lettuce.core.support.ConnectionPoolSupport;
+import org.apache.commons.pool2.impl.GenericObjectPool;
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.hash.HashMapper;
-import org.springframework.data.redis.hash.Jackson2HashMapper;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 public class RedisConfig {
 
-    @Bean
-    public RedisTemplate<String,Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        RedisTemplate<String, Object> template = new RedisTemplate<>();
-        template.setConnectionFactory(redisConnectionFactory);
-
-
-        // Set up JSON serialization for both keys and values
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule()); // Support for Java 8 Date/Time
-        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-
-        GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer(objectMapper);
-
-        template.setKeySerializer(new StringRedisSerializer());  // Keys as Strings
-        template.setValueSerializer(serializer);                 // JSON Serializer
-        template.setHashKeySerializer(new StringRedisSerializer());
-        template.setHashValueSerializer(serializer);
-
-        template.afterPropertiesSet();
-        return template;
-
-
-//        // Use String serializer for keys
-//        template.setKeySerializer(new StringRedisSerializer());
-//        template.setHashKeySerializer(new StringRedisSerializer());
+//    @Bean
+//    public RedisTemplate<?,?> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+//        RedisTemplate<?,?> redisTemplate = new RedisTemplate<>();
+//        redisTemplate.setKeySerializer(new StringRedisSerializer());
+//        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+//        redisTemplate.setConnectionFactory(redisConnectionFactory);
 //
-//        // Use JSON serializer for values
-//        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-//        template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
+//        return redisTemplate;
+//    }
+    @Value("${spring.data.redis.password}")
+    String redisPassword;
+    @Value("${spring.data.redis.port}")
+            String redisPort;
+    @Value("${spring.data.redis.host}")
+            String redisHost;
 
+    String redisUrl=String.format("redis://%s@%s:%s",redisPassword,redisHost,redisPort);
+    @Bean(destroyMethod = "close")
+    public GenericObjectPool<StatefulRedisModulesConnection<String, String>> redisPool() {
+        RedisModulesClient client = RedisModulesClient.create(redisUrl);
+
+        GenericObjectPoolConfig<StatefulRedisModulesConnection<String, String>> poolConfig =
+                new GenericObjectPoolConfig<>();
+
+        poolConfig.setMaxTotal(20);       // Maximum active connections
+        poolConfig.setMaxIdle(10);        // Maximum idle connections
+        poolConfig.setMinIdle(5);         // Minimum idle connections
+        poolConfig.setTestOnBorrow(true); // Validate connection on borrow
+        poolConfig.setJmxEnabled(false);
+
+        return ConnectionPoolSupport.createGenericObjectPool(
+                client::connect, // Connection supplier
+                poolConfig
+        );
     }
 
-    @Bean
-    public CustomJacksonHashMapper<TripRequest> detailsHashMapper() {
-        return new CustomJacksonHashMapper<>(TripRequest.class);
-    }
-
-    @Bean
-    public Jackson2HashMapper jackson2HashMapper() {
-        return new Jackson2HashMapper(false);
-    }
 }
