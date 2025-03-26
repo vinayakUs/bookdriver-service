@@ -28,7 +28,7 @@ public class RedisConfig {
     @Value("${spring.data.redis.host}")
             String redisHost;
 
-    String redisUrl=String.format("redis://%s@%s:%s",redisPassword,redisHost,redisPort);
+    String redisUrl="redis://nE8GGRHl9OVCkJIcdFel5WcslHn6bDh2@redis-19507.c277.us-east-1-3.ec2.redns.redis-cloud.com:19507";
     @Bean(destroyMethod = "close")
     public GenericObjectPool<StatefulRedisModulesConnection<String, String>> redisPool() {
         RedisModulesClient client = RedisModulesClient.create(redisUrl);
@@ -38,7 +38,7 @@ public class RedisConfig {
 
         poolConfig.setMaxTotal(20);       // Maximum active connections
         poolConfig.setMaxIdle(10);        // Maximum idle connections
-        poolConfig.setMinIdle(5);         // Minimum idle connections
+        poolConfig.setMinIdle(1);         // Minimum idle connections
         poolConfig.setTestOnBorrow(true); // Validate connection on borrow
         poolConfig.setJmxEnabled(false);
 

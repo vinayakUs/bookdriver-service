@@ -1,5 +1,7 @@
 package org.example.tripservice.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.redis.lettucemod.api.StatefulRedisModulesConnection;
 import com.redis.lettucemod.api.async.RedisModulesAsyncCommands;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +23,7 @@ public class TripService {
     private GenericObjectPool<StatefulRedisModulesConnection<String, String>> pool;
 
 
-    public TripResponseDTO requestTrip(TripRequest request) {
+    public TripResponseDTO requestTrip(TripRequest request)  {
         String tripId = UUID.randomUUID().toString();
 
         TripResponseDTO response =  TripResponseDTO.builder()
@@ -33,17 +35,31 @@ public class TripService {
                 .build();
 
 //            restTemplate.opsForValue().set("KEY_TRIP "+tripId, request);
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            saveTripToRedis("TRIP_REQUSET:"+tripId,objectMapper.writeValueAsString(request));
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+
+        }
         kafkaProducerService.publishTripEvent(request,tripId);
 
         return  response;
     }
 
 
-    private void saveTripToRedis(String key,String value) throws Exception {
+    private void saveTripToRedis(String key,String value)  {
         try (StatefulRedisModulesConnection<String, String> connection = pool.borrowObject()) { // (3)
             RedisModulesAsyncCommands<String, String> commands = connection.async(); // (4)
+            System.out.println("sssssssssssss");
+            commands.jsonSet("user:123", "$",
+                    "{\"name\":\"John\",\"age\":30,\"address\":{\"city\":\"New York\"}}");
+
+//            commands.jsonSet(key,"$",value);
         }catch (Exception e ){
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 }
