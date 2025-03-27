@@ -3,6 +3,21 @@ spring:
   application:
     name: driver-service
 
+  datasource:
+    url: jdbc:mysql://sql-service-radhikaandrew12-e714.c.aivencloud.com:22788/defaultdb
+    username: avnadmin
+    password: AVNS_UkmJhgfSOV7ARO2OiaS
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQLDialect
+
+
+
+
   graphql:
     graphiql:
       path: /graphiql
@@ -73,4 +88,4 @@ app:
     trip:
       requested : 'TRIP_REQUEST_EVENT'
 server:
-  port: 8088
+  port: 8089
