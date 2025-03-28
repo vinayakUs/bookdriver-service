@@ -5,7 +5,6 @@ import com.redis.lettucemod.api.async.RedisModulesAsyncCommands;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.pool2.impl.GenericObjectPool;
-import org.example.tripservice.dto.TripDetails;
 import org.springframework.stereotype.Service;
 
 @Service

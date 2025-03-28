@@ -1,0 +1,27 @@
+{
+  "type": "record",
+  "name": "TripDetails",
+  "namespace": "org.example.sharedlibs.trips",
+  "fields": [
+    {
+      "name": "tripId",
+      "type": "string"
+    },
+    {
+      "name": "source",
+      "type": "org.example.sharedlibs.trips.Location"
+    },
+    {
+      "name": "destination",
+      "type": "org.example.sharedlibs.trips.Location"
+    },
+    {
+      "name": "tripStatus",
+      "type": {
+        "type": "enum",
+        "name": "TRIP_STATUS",
+        "symbols": ["STARTED", "IN_PROGRESS", "COMPLETED", "CANCELLED"]
+      }
+    }
+  ]
+}

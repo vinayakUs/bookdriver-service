@@ -2,8 +2,7 @@ package org.example.tripservice.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.tripservice.dto.TripDetails;
-import org.example.tripservice.dto.TripRequest;
+import org.example.sharedlibs.TripDetails;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;

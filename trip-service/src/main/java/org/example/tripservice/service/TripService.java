@@ -1,12 +1,9 @@
 package org.example.tripservice.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.redis.lettucemod.api.StatefulRedisModulesConnection;
-import com.redis.lettucemod.api.async.RedisModulesAsyncCommands;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.pool2.impl.GenericObjectPool;
+import org.example.sharedlibs.TripDetails;
 import org.example.tripservice.dto.TRIP_STAUS;
-import org.example.tripservice.dto.TripDetails;
 import org.example.tripservice.dto.TripRequest;
 import org.example.tripservice.dto.TripResponseDTO;
 import org.springframework.stereotype.Service;

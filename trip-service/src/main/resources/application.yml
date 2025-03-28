@@ -21,14 +21,16 @@ spring:
               type:
                 headers: false
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+    #      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
       group-id: driver-service
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+#      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.trusted.packages: "org.example.tripservice.TripRequest"
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
 
   data:
     redis:
