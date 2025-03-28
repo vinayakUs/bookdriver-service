@@ -2,7 +2,8 @@ package org.example.tripservice.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.tripservice.TripRequest;
+import org.example.tripservice.dto.TripDetails;
+import org.example.tripservice.dto.TripRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
@@ -19,7 +20,7 @@ public class KafkaProducerService {
     @Value("${app.event.trip.requested}")
     private String tripRequestedTopic;
 
-    public void publishTripEvent(TripRequest trip, String tripId) {
+    public void publishTripEvent(TripDetails trip, String tripId) {
         CompletableFuture<SendResult<String, Object>> future = kafkaTemplate.send(tripRequestedTopic, tripId, trip);
         future.whenComplete((r, e) -> {
             if(e != null) {

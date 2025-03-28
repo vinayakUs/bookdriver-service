@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 public class TripRequestConsumer {
 
     @KafkaListener(topics = "TRIP_REQUEST_EVENT", groupId = "driver-service-group" )
-public void consumeTripRequestEvent(TripRequest tripRequest) {
-log.info("Received trip request: " + tripRequest);
-}
+    public void consumeTripRequestEvent(String tripRequest) {
+
+        log.info("Received trip request: " + tripRequest);
+
+    }
 
 }

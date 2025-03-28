@@ -36,10 +36,8 @@ spring:
       #      host: redis-19507.c277.us-east-1-3.ec2.redns.redis-cloud.com
       password: nE8GGRHl9OVCkJIcdFel5WcslHn6bDh2
       username: default
-#      host: localhost
-      host: redis-19507.c277.us-east-1-3.ec2.redns.redis-cloud.com
-#      port: 6379
-      port: 19507
+      host: localhost
+      port: 6379
 #  redis-cli -u :19507
 
 

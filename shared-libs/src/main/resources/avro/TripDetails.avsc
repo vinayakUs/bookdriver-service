@@ -1,0 +1,70 @@
+{
+  "type": "record",
+  "name": "TripDetails",
+  "namespace": "org.example.sharedlibs",
+  "fields": [
+    {
+      "name": "tripId",
+      "type": "string"
+    },
+    {
+      "name": "source",
+      "type": {
+        "type": "record",
+        "name": "Location",
+        "fields": [
+          {
+            "name": "addressLine1",
+            "type": "string"
+          },
+          {
+            "name": "addressLine2",
+            "type": ["null", "string"],
+            "default": null
+          },
+          {
+            "name": "coordinate",
+            "type": {
+              "type": "record",
+              "name": "Coordinate",
+              "fields": [
+                {
+                  "name": "latitude",
+                  "type": "double"
+                },
+                {
+                  "name": "longitude",
+                  "type": "double"
+                }
+              ]
+            }
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "provider",
+            "type": "string"
+          },
+          {
+            "name": "source",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "destination",
+      "type": "Location"
+    },
+    {
+      "name": "tripStatus",
+      "type": {
+        "type": "enum",
+        "name": "TRIP_STATUS",
+        "symbols": ["STARTED", "IN_PROGRESS", "COMPLETED", "CANCELLED"]
+      }
+    }
+  ]
+}

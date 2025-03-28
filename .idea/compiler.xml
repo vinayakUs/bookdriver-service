@@ -8,8 +8,9 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="eureka-service" />
-        <module name="cloud-gateway" />
         <module name="auth-service" />
+        <module name="shared-libs" />
+        <module name="cloud-gateway" />
       </profile>
       <profile name="Annotation profile for trip-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -31,6 +32,7 @@
       <module name="driver-service" options="-parameters" />
       <module name="eureka-service" options="-parameters" />
       <module name="location-service" options="-parameters" />
+      <module name="shared-libs" options="-parameters" />
       <module name="trip-service" options="-parameters" />
     </option>
   </component>

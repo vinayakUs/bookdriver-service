@@ -32,16 +32,16 @@ public class TripServiceApplication {
             public void run(String... args) throws Exception {
                 // Example operations
                 System.out.println("=== RedisJSON CLI ===");
-                try (StatefulRedisModulesConnection<String, String> connection = pool.borrowObject()) { // (3)
-                    RedisModulesAsyncCommands<String, String> commands = connection.async(); // (4)
-
-                    commands.jsonSet("user:22", "$",
-                            "{\"name\":\"John\",\"age\":30,\"address\":{\"city\":\"New York\"}}");
-                    System.out.println("Set user:1");
-                    // ...
-                } catch (Exception e) {
-                    log.error("Could not get a connection from the pool", e);
-                }
+//                try (StatefulRedisModulesConnection<String, String> connection = pool.borrowObject()) { // (3)
+//                    RedisModulesAsyncCommands<String, String> commands = connection.async(); // (4)
+//
+//                    commands.jsonSet("user:22", "$",
+//                            "{\"name\":\"John\",\"age\":30,\"address\":{\"city\":\"New York\"}}");
+//                    System.out.println("Set user:1");
+//                    // ...
+//                } catch (Exception e) {
+//                    log.error("Could not get a connection from the pool", e);
+//                }
             }
         };
     }
