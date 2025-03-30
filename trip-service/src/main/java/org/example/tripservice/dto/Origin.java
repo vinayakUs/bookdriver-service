@@ -3,6 +3,7 @@ package org.example.tripservice.dto;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.sharedlibs.Location;
 
 import java.io.Serializable;
 

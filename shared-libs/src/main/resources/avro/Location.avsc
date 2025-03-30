@@ -1,0 +1,32 @@
+{
+  "type": "record",
+  "name": "Location",
+  "namespace": "org.example.sharedlibs",
+  "fields": [
+    {
+      "name": "addressLine1",
+      "type": "string"
+    },
+    {
+      "name": "addressLine2",
+      "type": ["null", "string"],
+      "default": null
+    },
+    {
+      "name": "coordinate",
+      "type": "Coordinate"
+    },
+    {
+      "name": "id",
+      "type": "string"
+    },
+    {
+      "name": "provider",
+      "type": "string"
+    },
+    {
+      "name": "source",
+      "type": "string"
+    }
+  ]
+}

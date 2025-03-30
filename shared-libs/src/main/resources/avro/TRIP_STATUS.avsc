@@ -1,0 +1,6 @@
+{
+  "namespace": "org.example.sharedlibs",
+  "type": "enum",
+  "name": "TRIP_STATUS",
+  "symbols": ["STARTED", "IN_PROGRESS", "COMPLETED", "CANCELLED","TRIP_REQUESTED"]
+}

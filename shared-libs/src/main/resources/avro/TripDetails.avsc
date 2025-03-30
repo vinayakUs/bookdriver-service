@@ -1,0 +1,24 @@
+{
+  "type": "record",
+  "name": "TripDetails",
+  "namespace": "org.example.sharedlibs",
+  "fields": [
+    {
+      "name": "tripId",
+      "type": "string"
+    },
+    {
+      "name": "source",
+      "type": "Location"
+    },
+    {
+      "name": "destination",
+      "type": "Location"
+    },
+    {
+      "name": "tripStatus",
+           "type": "TRIP_STATUS"
+
+    }
+  ]
+}

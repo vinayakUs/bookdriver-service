@@ -60,11 +60,9 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.avro</groupId>
                 <artifactId>avro-maven-plugin</artifactId>
-                <version>1.11.0</version>
                 <executions>
                     <execution>
                         <phase>generate-sources</phase>
@@ -72,17 +70,55 @@
                             <goal>schema</goal>
                         </goals>
                         <configuration>
-                            <sourceDirectory>src/main/resources/avro/</sourceDirectory>
-                            <outputDirectory>${project.build.directory}/src/main/java/</outputDirectory>
-<!--                            <outputDirectory>${project.build.directory}/generated-sources/avro</outputDirectory>-->
-                            <stringType>String</stringType>
+                            <sourceDirectory>${project.basedir}/src/main/resources/avro</sourceDirectory>
+<!--                            <outputDirectory>${project.build.directory}/src/main/java/</outputDirectory>-->
+                              <outputDirectory>${project.basedir}/src/main/java</outputDirectory>
+                            <includes>
+                                <include>**/*.avro</include>
+                            </includes>
                             <imports>
-                                <import>${project.basedir}/src/main/resources/avro/trip</import>  <!-- Ensure all dependencies are available -->
+                                <import>${project.basedir}/src/main/resources/avro/Test.avsc</import>
+                                <import>${project.basedir}/src/main/resources/avro/TRIP_STATUS.avsc</import>
+                                <import>${project.basedir}/src/main/resources/avro/Coordinate.avsc</import>
+                                <import>${project.basedir}/src/main/resources/avro/Location.avsc</import>
+                                <import>${project.basedir}/src/main/resources/avro/TripDetails.avsc</import>
+
+
                             </imports>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+
+<!--            <plugin>-->
+<!--                <groupId>org.apache.avro</groupId>-->
+<!--                <artifactId>avro-maven-plugin</artifactId>-->
+<!--                <version>1.11.0</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <phase>generate-sources</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>schema</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <sourceDirectory>src/main/resources/avro/</sourceDirectory>-->
+<!--                            <outputDirectory>${project.build.directory}/src/main/java/</outputDirectory>-->
+<!--                            <stringType>String</stringType>-->
+<!--&lt;!&ndash;                            <includes>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <include>trip-status.avsc</include>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <include>Coordinate.avsc</include>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <include>location.avsc</include>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <include>trip-details.avsc</include>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                            </includes>&ndash;&gt;-->
+<!--                            <imports>-->
+
+<!--                                <import>${project.basedir}/src/main/resources/avro/</import>  &lt;!&ndash; Ensure all dependencies are available &ndash;&gt;-->
+<!--                            </imports>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
 
 
 

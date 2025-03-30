@@ -5,32 +5,49 @@ spring:
     graphiql:
       path: /graphiql
   kafka:
-    bootstrap-servers: pkc-619z3.us-east1.gcp.confluent.cloud:9092
-    properties:
-      security:
-        protocol: SASL_SSL
-      sasl:
-        jaas:
-          config: org.apache.kafka.common.security.plain.PlainLoginModule required username='QOAYABDEKG56I3HL' password='NauUMCZB5xwQ+RQvooQj2SZ1ZCxeni4Ye4jFpJL08kuN5vsH3J7rw0CwmrcJsdAY';
-        mechanism: PLAIN
+
+#    bootstrap-servers: pkc-619z3.us-east1.gcp.confluent.cloud:9092
+    bootstrap-servers: http://localhost:9092
+#    properties:
+#      security:
+#        protocol: SASL_SSL
+#      sasl:
+#        jaas:
+#          config: org.apache.kafka.common.security.plain.PlainLoginModule required username='QOAYABDEKG56I3HL' password='NauUMCZB5xwQ+RQvooQj2SZ1ZCxeni4Ye4jFpJL08kuN5vsH3J7rw0CwmrcJsdAY';
+#        mechanism: PLAIN
     producer:
-      properties:
-        spring:
-          json:
-            add:
-              type:
-                headers: false
+#      schema:
+#        registry:
+#          url: 'https://psrc-6ood18.us-east1.gcp.confluent.cloud'
+#      spring:
+#        json:
+#          add:
+#            type:
+#              headers: true
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      properties:
+        schema.registry.url: "http://localhost:8081"
+        basic.auth.credentials.source: USER_INFO
+        basic.auth.user.info: "5UADSPJTAIMMQAGM:NjJ2l5Ip7Gku/J14Os1XRSkzVLRYb4DP2/sIU5aw3OOAK4/7a1JHuVyBXw3AtOfA"
+
     #      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
-      group-id: driver-service
+      group-id: trip-service
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 #      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-      properties:
-        spring.json.trusted.packages: "org.example.tripservice.TripRequest"
+#      properties:
+#        spring.json.trusted.packages: "org.example.tripservice.TripRequest"
       value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      properties:
+        schema:
+          registry:
+            url: 'http://localhost:8081'
+        specific:
+          avro:
+            reader: "true"
+
 
   data:
     redis:

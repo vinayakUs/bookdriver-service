@@ -1,0 +1,11 @@
+{
+  "type": "record",
+  "namespace": "org.example.sharedlibs",
+  "name": "Test123",
+  "fields": [
+    {
+      "name": "name",
+      "type": "string"
+    }
+  ]
+}

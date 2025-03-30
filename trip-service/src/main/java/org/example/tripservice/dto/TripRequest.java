@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.Generated;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.sharedlibs.Location;
 
 import java.io.Serializable;
 import java.util.List;
