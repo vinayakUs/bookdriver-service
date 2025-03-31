@@ -1,29 +1,19 @@
 package org.example.tripservice.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.apache.avro.generic.GenericData;
-import org.apache.avro.generic.GenericDatumWriter;
-import org.apache.avro.generic.GenericRecord;
-import org.apache.avro.io.*;
-import org.apache.avro.specific.SpecificDatumReader;
-import org.apache.avro.specific.SpecificDatumWriter;
-import org.apache.kafka.clients.producer.ProducerRecord;
+import lombok.extern.slf4j.Slf4j;
 import org.example.sharedlibs.TRIP_STATUS;
-import org.example.sharedlibs.Test123;
 import org.example.sharedlibs.TripDetails;
 import org.example.tripservice.AvroToJsonConverter;
 import org.example.tripservice.dto.TripRequest;
 import org.example.tripservice.dto.TripResponseDTO;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TripService {
 
     private final KafkaProducerService kafkaProducerService;
@@ -31,36 +21,32 @@ public class TripService {
     private final AvroToJsonConverter avroToJsonConverter;
 
 
-
-
-    public TripResponseDTO requestTrip(TripRequest request)   {
+    public TripResponseDTO requestTrip(TripRequest request) {
         String tripId = UUID.randomUUID().toString();
 
-        TripResponseDTO response =  TripResponseDTO.builder()
+        TripResponseDTO response = TripResponseDTO.builder()
                 .uuid(tripId)
                 .errorCode(null)
                 .errorKey(null)
                 .plusOne(null)
-                .riderHasCompletedTrips(true)  // Assuming true for now
+                .riderHasCompletedTrips(true)
                 .build();
 
-
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        TripDetails trip  = new TripDetails();
+        TripDetails trip = new TripDetails();
         trip.setTripId(tripId);
         trip.setDestination(request.getDestinations().get(0));
         trip.setSource(request.getOrigin().getLocation());
         trip.setTripStatus(TRIP_STATUS.TRIP_REQUESTED);
 
-
         try {
-            redisService.storeTrip("TRIP_REQUEST:"+tripId,avroToJsonConverter.deserialize(trip));
-            kafkaProducerService.publishTripEvent(tripId,trip);
-        }catch (Exception e){
-            System.out.println(e.getMessage());
+            redisService.storeTrip("TRIP_REQUEST:" + tripId, avroToJsonConverter.deserialize(trip));
+            kafkaProducerService.publishTripEvent(tripId, trip);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            response.setErrorCode("500");
+            return response;
         }
-        return  response;
+        return response;
     }
 
 }

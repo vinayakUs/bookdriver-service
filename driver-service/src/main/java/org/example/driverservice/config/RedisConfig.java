@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RedisConfig {
 
-    String redisUrl="redis://nE8GGRHl9OVCkJIcdFel5WcslHn6bDh2@redis-19507.c277.us-east-1-3.ec2.redns.redis-cloud.com:19507";
+    String redisUrl="redis://localhost:6379";
 
     @Bean(destroyMethod = "close")
     public GenericObjectPool<StatefulRedisModulesConnection<String, String>> redisPool() {

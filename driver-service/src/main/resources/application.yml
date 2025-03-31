@@ -3,61 +3,22 @@ spring:
   application:
     name: driver-service
 
-  datasource:
-    url: jdbc:mysql://sql-service-radhikaandrew12-e714.c.aivencloud.com:22788/defaultdb
-    username: avnadmin
-    password: AVNS_UkmJhgfSOV7ARO2OiaS
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  jpa:
-    hibernate:
-      ddl-auto: update
-
-    show-sql: true
-    database-platform: org.hibernate.dialect.MySQLDialect
-
-
-
-
   graphql:
     graphiql:
       path: /graphiql
-
   kafka:
-
-    #    bootstrap-servers: pkc-619z3.us-east1.gcp.confluent.cloud:9092
     bootstrap-servers: http://localhost:9092
-    #    properties:
-    #      security:
-    #        protocol: SASL_SSL
-    #      sasl:
-    #        jaas:
-    #          config: org.apache.kafka.common.security.plain.PlainLoginModule required username='QOAYABDEKG56I3HL' password='NauUMCZB5xwQ+RQvooQj2SZ1ZCxeni4Ye4jFpJL08kuN5vsH3J7rw0CwmrcJsdAY';
-    #        mechanism: PLAIN
+#    properties:
+#      security:
+#        protocol: SASL_SSL
+#      sasl:
+#        jaas:
+#          config: org.apache.kafka.common.security.plain.PlainLoginModule required username='QOAYABDEKG56I3HL' password='NauUMCZB5xwQ+RQvooQj2SZ1ZCxeni4Ye4jFpJL08kuN5vsH3J7rw0CwmrcJsdAY';
+#        mechanism: PLAIN
     producer:
-      #      schema:
-      #        registry:
-      #          url: 'https://psrc-6ood18.us-east1.gcp.confluent.cloud'
-      #      spring:
-      #        json:
-      #          add:
-      #            type:
-      #              headers: true
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
-      properties:
-        schema.registry.url: "http://localhost:8081"
-        basic.auth.credentials.source: USER_INFO
-        basic.auth.user.info: "5UADSPJTAIMMQAGM:NjJ2l5Ip7Gku/J14Os1XRSkzVLRYb4DP2/sIU5aw3OOAK4/7a1JHuVyBXw3AtOfA"
-
-    #      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
-      group-id: trip-service
-      auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      #      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-      #      properties:
-      #        spring.json.trusted.packages: "org.example.tripservice.TripRequest"
-      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
       properties:
         schema:
           registry:
@@ -66,49 +27,21 @@ spring:
           avro:
             reader: "true"
 
+#        spring:
+#          json:
+#            value:
+#              default:
+#                type: org.example.driverservice.TripRequest
+#            trusted:
+#              packages: "*"  # Allows deserialization even if package names differ
+#            use:
+#              type:
+#                headers: false  # Prevents deserializer from looking for class type
 
-  #  kafka:
-##    bootstrap-servers: pkc-619z3.us-east1.gcp.confluent.cloud:9092
-#    bootstrap-servers: http://localhost:9092
-##    properties:
-##      security:
-##        protocol: SASL_SSL
-##      sasl:
-##        jaas:
-##          config: org.apache.kafka.common.security.plain.PlainLoginModule required username='QOAYABDEKG56I3HL' password='NauUMCZB5xwQ+RQvooQj2SZ1ZCxeni4Ye4jFpJL08kuN5vsH3J7rw0CwmrcJsdAY';
-##        mechanism: PLAIN
-#    producer:
-#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-#      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
-#      properties:
-#        schema.registry.url: "http://localhost:8081"
-#        basic.auth.credentials.source: USER_INFO
-#        basic.auth.user.info: "5UADSPJTAIMMQAGM:NjJ2l5Ip7Gku/J14Os1XRSkzVLRYb4DP2/sIU5aw3OOAK4/7a1JHuVyBXw3AtOfA"
-#
-#    consumer:
-#      properties:
-#        schema:
-#          registry:
-#            url: 'http://localhost:8081'
-#        specific:
-#          avro:
-#            reader: "true"
-##        spring:
-##          json:
-##            value:
-##              default:
-##                type: org.example.driverservice.TripRequest
-##            trusted:
-##              packages: "*"  # Allows deserialization even if package names differ
-##            use:
-##              type:
-##                headers: false  # Prevents deserializer from looking for class type
-#
-#      group-id: driver-service
-#      auto-offset-reset: earliest
-#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-#      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
-
+      group-id: driver-service
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
 #      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
   data:
     redis:
@@ -147,5 +80,3 @@ app:
       requested : 'TRIP_REQUEST_EVENT'
 server:
   port: 8089
-
-

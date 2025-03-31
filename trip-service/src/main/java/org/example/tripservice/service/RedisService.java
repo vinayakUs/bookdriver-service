@@ -14,13 +14,13 @@ public class RedisService {
 
     private final GenericObjectPool<StatefulRedisModulesConnection<String, String>> pool;
 
-    public void storeTrip(String key,String tripDetails){
+    public void storeTrip(String key, String tripDetails) {
 
-        try (StatefulRedisModulesConnection<String, String> connection = pool.borrowObject()) { // (3)
-            RedisModulesAsyncCommands<String, String> commands = connection.async(); // (4)
+        try (StatefulRedisModulesConnection<String, String> connection = pool.borrowObject()) {
+            RedisModulesAsyncCommands<String, String> commands = connection.async();
 
             commands.jsonSet(key, "$", tripDetails);
-             // ...
+            // ...
         } catch (Exception e) {
             log.error("Could not get a connection from the pool", e);
         }

@@ -1,16 +1,11 @@
 package org.example.tripservice;
 
-import com.redis.lettucemod.api.StatefulRedisModulesConnection;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.pool2.impl.GenericObjectPool;
-import org.example.sharedlibs.Test123;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.kafka.core.KafkaTemplate;
 
 @SpringBootApplication
 @Slf4j
@@ -19,11 +14,6 @@ public class TripServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(TripServiceApplication.class, args);
     }
-
-    @Autowired
-    private GenericObjectPool<StatefulRedisModulesConnection<String, String>> pool;
-    @Autowired
-    private KafkaTemplate<String, Test123> kafkaTemplate;
 
 
     @Bean

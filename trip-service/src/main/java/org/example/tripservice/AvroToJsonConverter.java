@@ -11,10 +11,10 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 @Component
-public class AvroToJsonConverter{
+public class AvroToJsonConverter {
 
     public <T extends org.apache.avro.specific.SpecificRecord> String deserialize(T avroObejct) throws IOException {
-        if(avroObejct==null){
+        if (avroObejct == null) {
             throw new IllegalArgumentException("Avro Object Null");
         }
 
