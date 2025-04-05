@@ -1,7 +1,7 @@
 {
   "type": "record",
   "name": "Location",
-  "namespace": "org.example.sharedlibs",
+  "namespace": "org.example.sharedlibs.avro",
   "fields": [
     {
       "name": "addressLine1",

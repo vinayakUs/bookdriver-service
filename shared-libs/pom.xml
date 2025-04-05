@@ -71,7 +71,6 @@
                         </goals>
                         <configuration>
                             <sourceDirectory>${project.basedir}/src/main/resources/avro</sourceDirectory>
-<!--                            <outputDirectory>${project.build.directory}/src/main/java/</outputDirectory>-->
                               <outputDirectory>${project.basedir}/src/main/java</outputDirectory>
                             <includes>
                                 <include>**/*.avro</include>

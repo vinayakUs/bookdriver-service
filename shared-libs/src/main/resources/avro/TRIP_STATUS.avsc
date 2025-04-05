@@ -1,5 +1,5 @@
 {
-  "namespace": "org.example.sharedlibs",
+  "namespace": "org.example.sharedlibs.avro",
   "type": "enum",
   "name": "TRIP_STATUS",
   "symbols": ["STARTED", "IN_PROGRESS", "COMPLETED", "CANCELLED","TRIP_REQUESTED"]

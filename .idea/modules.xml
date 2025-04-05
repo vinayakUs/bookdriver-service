@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/bookdriver-service.iml" filepath="$PROJECT_DIR$/.idea/bookdriver-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/drive-frontend/drive-frontend.iml" filepath="$PROJECT_DIR$/drive-frontend/drive-frontend.iml" />
-      <module fileurl="file://$PROJECT_DIR$/frontend/frontend.iml" filepath="$PROJECT_DIR$/frontend/frontend.iml" />
     </modules>
   </component>
 </project>

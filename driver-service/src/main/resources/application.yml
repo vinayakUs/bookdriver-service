@@ -7,7 +7,7 @@ spring:
     graphiql:
       path: /graphiql
   kafka:
-    bootstrap-servers: http://localhost:9092
+    bootstrap-servers: http://server.vinayakpaste.site:9092
 #    properties:
 #      security:
 #        protocol: SASL_SSL
@@ -22,7 +22,7 @@ spring:
       properties:
         schema:
           registry:
-            url: 'http://localhost:8081'
+            url: 'http://server.vinayakpaste.site:8081'
         specific:
           avro:
             reader: "true"
@@ -43,15 +43,7 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
 #      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-  data:
-    redis:
-      #      port: 19507
-      #      host: redis-19507.c277.us-east-1-3.ec2.redns.redis-cloud.com
-      password: nE8GGRHl9OVCkJIcdFel5WcslHn6bDh2
-      username: default
-      host: localhost
-      port: 6379
-#  redis-cli -u :19507
+ #  redis-cli -u :19507
 
 
 #  kafka:
@@ -75,6 +67,15 @@ spring:
 
 
 app:
+
+  redis:
+    #      port: 19507
+    #      host: redis-19507.c277.us-east-1-3.ec2.redns.redis-cloud.com
+    password: admin
+    username: default
+    host: 'server.vinayakpaste.site'
+    port: 6379
+
   event:
     trip:
       requested : 'TRIP_REQUEST_EVENT'

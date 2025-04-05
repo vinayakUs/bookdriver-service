@@ -2,8 +2,8 @@ package org.example.tripservice.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.sharedlibs.TRIP_STATUS;
-import org.example.sharedlibs.TripDetails;
+import org.example.sharedlibs.avro.TRIP_STATUS;
+import org.example.sharedlibs.avro.TripDetails;
 import org.example.tripservice.AvroToJsonConverter;
 import org.example.tripservice.dto.TripRequest;
 import org.example.tripservice.dto.TripResponseDTO;
@@ -40,7 +40,7 @@ public class TripService {
 
         try {
             redisService.storeTrip("TRIP_REQUEST:" + tripId, avroToJsonConverter.deserialize(trip));
-            kafkaProducerService.publishTripEvent(tripId, trip);
+           kafkaProducerService.publishTripEvent(tripId, trip);
         } catch (Exception e) {
             log.error(e.getMessage());
             response.setErrorCode("500");

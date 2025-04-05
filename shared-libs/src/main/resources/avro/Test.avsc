@@ -1,6 +1,6 @@
 {
   "type": "record",
-  "namespace": "org.example.sharedlibs",
+  "namespace": "org.example.sharedlibs.avro",
   "name": "Test123",
   "fields": [
     {
