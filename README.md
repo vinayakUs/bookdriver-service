@@ -383,3 +383,23 @@ echo ""
 echo "✅ Runtime service check complete! Use 'journalctl -u <service>' for more logs."
 
 ```
+
+
+```bash
+gcloud compute instances create stack ^
+  --project=effortless-lock-450919-m1 ^
+  --zone=asia-south1-b ^
+  --machine-type=e2-medium ^
+  --network-interface=network-tier=PREMIUM,stack-type=IPV4_ONLY,subnet=default ^
+  --maintenance-policy=MIGRATE ^
+  --provisioning-model=STANDARD ^
+  --service-account=102870825273-compute@developer.gserviceaccount.com ^
+  --scopes=https://www.googleapis.com/auth/devstorage.read_only,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write,https://www.googleapis.com/auth/service.management.readonly,https://www.googleapis.com/auth/servicecontrol,https://www.googleapis.com/auth/trace.append ^
+  --tags=redis,http-server,https-server ^
+  --create-disk=auto-delete=yes,boot=yes,device-name=stack,image=projects/debian-cloud/global/images/debian-11-bullseye-v20250311,mode=rw,size=60,type=pd-balanced ^
+  --no-shielded-secure-boot ^
+  --shielded-vtpm ^
+  --shielded-integrity-monitoring ^
+  --labels=goog-ec-src=vm_add-gcloud ^
+  --reservation-affinity=any
+```
