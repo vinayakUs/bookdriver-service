@@ -273,3 +273,113 @@ sudo systemctl start redis-stack
 echo 'export PATH=$PATH:/opt/redis-stack/bin' >> ~/.bashrc && source ~/.bashrc
 
 ```
+
+
+```bash
+#!/bin/bash
+
+echo "====================================================="
+echo "      🔍 Confluent Platform & Redis Services Status"
+echo "====================================================="
+
+# Function to get systemd service status
+get_status() {
+    systemctl is-active --quiet "$1" && echo "RUNNING ✅" || echo "NOT RUNNING ❌"
+}
+
+# Function to find open ports and their corresponding processes
+get_open_port() {
+    port=$(netstat -tulnp 2>/dev/null | grep "$1" | awk '{print $4}' | awk -F: '{print $NF}' | uniq)
+    echo "${port:-N/A}"
+}
+
+# Function to check and display available services dynamically
+check_services() {
+    services=(
+        "confluent-zookeeper"
+        "confluent-kafka"
+        "confluent-schema-registry"
+        "kafka-ui"
+        "redis-stack"
+    )
+
+    echo ""
+    echo "------------------------------------------------------------"
+    echo "| SERVICE                  | PORT  | STATUS  | URL         |"
+    echo "------------------------------------------------------------"
+
+    for service in "${services[@]}"; do
+        case $service in
+            confluent-zookeeper) port="2181" url="N/A" ;;
+            confluent-kafka) port="9092" url="N/A" ;;
+            confluent-schema-registry) port="8081" url="http://localhost:8081" ;;
+            kafka-ui) port="8080" url="http://localhost:8080" ;;
+            redis-stack) port="6379" url="N/A" ;;
+            *) port="N/A" url="N/A" ;;
+        esac
+
+        runtime_port=$(get_open_port "$port")
+        status=$(get_status "$service")
+
+        printf "| %-24s | %-5s | %-8s | %-20s |\n" "$service" "$runtime_port" "$status" "$url"
+    done
+
+    echo "------------------------------------------------------------"
+    echo ""
+}
+
+# Display the dynamic service status table
+check_services
+
+# Function to display detailed logs
+display_details() {
+    echo "====================================================="
+    echo "🔍 Detailed Logs and Runtime Information"
+    echo "====================================================="
+
+    for service in "${services[@]}"; do
+        echo "-----------------------------------------------"
+        echo "📌 Service: $service"
+        echo "-----------------------------------------------"
+        
+        # Show service status
+        systemctl status "$service" --no-pager | grep -E 'Active|Loaded' || echo "Service not found"
+        
+        # Show latest logs
+        echo "🔹 Recent Logs:"
+        journalctl -u "$service" --no-pager --lines=5 | tail -n 5
+        echo ""
+    done
+}
+
+# Call function to show details
+display_details
+
+# Additional runtime information
+echo "====================================================="
+echo "🔍 Additional Debugging Information"
+echo "====================================================="
+
+# Kafka Topics
+echo "🔹 Kafka Topics:"
+/opt/confluent/bin/kafka-topics --list --bootstrap-server localhost:9092 || echo "Kafka not available"
+echo ""
+
+# Schema Registry Subjects
+echo "🔹 Schema Registry Subjects:"
+curl -s http://localhost:8081/subjects | jq || echo "Schema Registry API not responding"
+echo ""
+
+# Redis Modules
+echo "🔹 Redis Modules:"
+redis-cli --no-auth-warning --user default --pass YourSecurePassword MODULE LIST || echo "Could not retrieve Redis modules"
+echo ""
+
+# Active Network Ports
+echo "🔹 Active Network Ports (Filtered):"
+netstat -tulnp 2>/dev/null | grep -E '6379|9092|2181|8081|8080' || echo "No active Confluent/Redis ports found"
+echo ""
+
+echo "✅ Runtime service check complete! Use 'journalctl -u <service>' for more logs."
+
+```
