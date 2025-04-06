@@ -6,7 +6,10 @@ import io.lettuce.core.support.ConnectionPoolSupport;
 import jakarta.annotation.PostConstruct;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
-import org.example.driverservice.RedisLock.RedisLock;
+import org.example.driverservice.redlock.RedLock;
+import org.redisson.Redisson;
+import org.redisson.api.RedissonClient;
+import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -56,14 +59,14 @@ public class RedisConfig {
         );
     }
 
-
-
-
-    @Autowired
-    private LettuceConnectionFactory lettuceConnectionFactory;
-
-    @Bean
-    public RedisLock redisLock() {
-        return new RedisLock.Builder(lettuceConnectionFactory,1).build();
+    @Bean(destroyMethod = "shutdown")
+    public RedissonClient redissonClient() {
+        Config config = new Config();
+        config.useSingleServer()
+                .setAddress("redis://server.vinayakpaste.site:6379")
+                .setUsername("default")
+                .setPassword("admin");
+        return Redisson.create(config);
     }
+
 }
