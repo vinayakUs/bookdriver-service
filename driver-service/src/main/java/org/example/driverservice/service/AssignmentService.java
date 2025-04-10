@@ -17,7 +17,9 @@ import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
@@ -27,7 +29,9 @@ import java.util.concurrent.TimeUnit;
 public class AssignmentService {
 
     private final GenericObjectPool<StatefulRedisModulesConnection<String, String>> pool;
-    private final RedLock redLock;
+//    private final RedLock redLock;
+    private final DriverService driverService;
+    private final RedissonClient redisson;
 
     public List<GeoWithin<String>> findNearestDriver(Location location) {
 
@@ -66,10 +70,22 @@ private final RedissonClient redissonClient;
             }
 
             // 2. Find nearest drivers (limited to 10 for efficiency)
-            List<GeoWithin<String>> driverList = findNearestDriver(tripDetails.getDestination());
+            List<GeoWithin<String>> _driverList =
+                    driverService.findAvailableDriverNearLocation(tripDetails.getDestination(),50);
+            List<GeoWithin<String>> driverList = new ArrayList<>();
+            _driverList.forEach(driver -> {
+                if(driver != null){
+                    driverList.add(driver);
+                }
+            });
+            //            List<>
+//            List<>
 
             // 3. Try assigning the first available driver
+            System.out.println("driverList: " + driverList);
+
             for(GeoWithin<String> driver : driverList){
+
 
                 String driverId = driver.getMember();
                 RLock driverRLock = redissonClient.getLock("lock_"+driver.getMember());

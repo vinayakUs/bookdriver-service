@@ -6,53 +6,87 @@ import io.lettuce.core.GeoArgs;
 import io.lettuce.core.GeoSearch;
 import io.lettuce.core.GeoWithin;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.pool2.impl.GenericObjectPool;
-import org.apache.kafka.common.protocol.types.Field;
+import org.example.driverservice.NoDriversAvailableException;
 import org.example.sharedlibs.avro.Location;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class DriverService {
 
     private static final String GEO_ZSET = "drivers:geo";
 
-    private static final String Available_HASH = "drivers:available:";
+    private static final String Available_HASH = "drivers:available";
 
 
-    private final GenericObjectPool<StatefulRedisModulesConnection<String,String>> redisConnectionPool;
+    private final GenericObjectPool<StatefulRedisModulesConnection<String, String>> redisConnectionPool;
 
-    private List<GeoWithin<String>> findAvailableDriverNearLocation(Location location,int radiusKm){
+    public List<GeoWithin<String>> findAvailableDriverNearLocation(Location location, int radiusKm) {
 
-        try(StatefulRedisModulesConnection<String,String> conn = redisConnectionPool.borrowObject()){
+        try (StatefulRedisModulesConnection<String, String> conn = redisConnectionPool.borrowObject()) {
             RedisModulesAsyncCommands<String, String> commands = conn.async();
 
             // Find all drivers in Radius
-              Future<List<GeoWithin<String>>> driverFuture= commands.geosearch(GEO_ZSET ,
-                    GeoSearch.fromCoordinates(location.getCoordinate().getLongitude(),location.getCoordinate().getLatitude()),
+            Future<List<GeoWithin<String>>> driverFuture = commands.geosearch(GEO_ZSET,
+                    GeoSearch.fromCoordinates(location.getCoordinate().getLongitude(), location.getCoordinate().getLatitude()),
                     GeoSearch.byRadius(radiusKm, GeoArgs.Unit.km),
                     new GeoArgs().withDistance().asc()
-                    );
-              List<GeoWithin<String>> drivers = driverFuture.get();
+            );
+            List<GeoWithin<String>> drivers = driverFuture.get();
 
-              drivers.stream().forEach(driver -> {
-                  commands.hexists()
-              });
+            System.out.println("-----------" + drivers.size());
+
+            List<GeoWithin<String>> availableDrivers = drivers.stream().map(driver -> {
+                System.out.println("Driver: " + driver.toString());
+
+                try {
+
+                    Future<Boolean> available = commands.hexists(Available_HASH, driver.getMember());
+                    System.out.println( "check hex exist "+ driver.getMember() + available.get());
+
+                    if (available.get(500, TimeUnit.MILLISECONDS)) {
+                        return driver;
+                    }
+
+                } catch (Exception e) {
+
+                    log.warn("Driver {} Exception", driver.getMember());
+
+                }
+
+                return null;
 
 
-        }catch (Exception e){}
+            }).toList();
+
+            System.out.println("------avl drivers "+availableDrivers.size());
 
 
+
+            if (availableDrivers.isEmpty()) {
+                throw new NoDriversAvailableException("No drivers available in " + radiusKm + " radius");
+            }
+
+            return availableDrivers;
+
+        } catch (Exception e) {
+            log.warn("Driver not found", e.getCause());
+        }
+
+
+        return null;
 
 
     }
 
 }
-
-
 
 
 //
