@@ -9,7 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
-import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication
 public class DriverServiceApplication {
@@ -19,20 +18,22 @@ public class DriverServiceApplication {
     }
 
     @Autowired
-    private RedissonClient redisson;
+    private RedissonClient redissonClient;
 
-    @Bean
-    public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
+  @Bean
+    public CommandLineRunner init(ApplicationContext applicationContext) {
         return new CommandLineRunner() {
 
             @Override
             public void run(String... args) throws Exception {
-                System.out.println("CommandLine Runner started");
-
-
+//                System.out.println("Creating redisson client");
+//                RLock lock = redissonClient.getLock( "drivers:geo"+"driver:1");
+//                System.out.println(lock.tryLock());
+//                System.out.println(lock.isLocked());
 
             }
         };
-    }
+  }
+    
 
 }

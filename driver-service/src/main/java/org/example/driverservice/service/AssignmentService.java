@@ -27,101 +27,72 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @RequiredArgsConstructor
 public class AssignmentService {
-
     private final GenericObjectPool<StatefulRedisModulesConnection<String, String>> pool;
-//    private final RedLock redLock;
     private final DriverService driverService;
-    private final RedissonClient redisson;
+    private final RedissonClient redissonClient;
 
-    public List<GeoWithin<String>> findNearestDriver(Location location) {
+    public static final  String LOCK_USER = "LOCK:USER";
+    public static final  String LOCK_DRIVER = "LOCK:DRIVER";
 
-        try (StatefulRedisModulesConnection<String, String> conn = pool.borrowObject()) {
-            RedisModulesAsyncCommands<String, String> commands = conn.async();
-            GeoArgs geoArgs = new GeoArgs().withDistance().asc();
-            Future<List<GeoWithin<String>>> futureResult = commands.geosearch("drivers", GeoSearch.fromCoordinates(location.getCoordinate().getLongitude(), location.getCoordinate().getLatitude()),
-                    GeoSearch.byRadius(50, GeoArgs.Unit.km),
-                    geoArgs
-            );
+    private void processDriverAssignment(TripDetails tripDetails, String driverId) {
+        RLock driverRLock = redissonClient.getLock("LOCK:DRIVER"+driverId);
+    }
+
+    public void assignDriver(TripDetails tripDetails){
+
+        // Phase 1: Reserve driver
+        GeoWithin<String> driver= driverService.findAndReserveDriver(tripDetails.getSource(),50)
+                    .orElseThrow(()-> new NoDriversAvailableException("No Driver available"));
 
 
-            return futureResult.get();
+        // Phase 2: Acquire user lock
+
+        RLock userLock = null;
+        RLock driverLock = null;
+
+        try {
+            userLock = redissonClient.getLock("USER:" + "asdasfnbalcsas");
+            if (!userLock.tryLock(500, 30, TimeUnit.SECONDS)) {
+                throw new AssignDriverException("Could not acquire user lock");
+            }
+
+            // Phase 3: Finalize with driver lock
+            driverLock = redissonClient.getLock("DRIVER:" + driver.getMember());
+            if (!driverLock.tryLock(500, 30, TimeUnit.SECONDS)) {
+                throw new AssignDriverException("Could not acquire driver lock");
+            }
+            completeAssignment(tripDetails, driver.getMember());
+
 
         } catch (Exception e) {
-            log.error("Could not get a connection from the pool", e);
+            driverService.releaseDriver(driver.getMember());
+            throw new AssignDriverException("Assignment failed", e.getMessage());
         }
-        return null;
-    }
-private final RedissonClient redissonClient;
 
-
-    public void assignDriver(TripDetails tripDetails) {
-
-        RLock lock = redissonClient.getLock("lock_" + "User:s93no-3f93ni-dd34e2");
-        try{
-            // try to get lock on user
-            boolean userLock = lock.tryLock(0 ,60 , TimeUnit.SECONDS);
-            if(!userLock){
-
-                log.info("User lock failed for user" + "user");
-                throw new AssignDriverException("User lock failed for id --");
-
-            }else {
-                log.info("User lock acquired for user" + "user");
-            }
-
-            // 2. Find nearest drivers (limited to 10 for efficiency)
-            List<GeoWithin<String>> _driverList =
-                    driverService.findAvailableDriverNearLocation(tripDetails.getDestination(),50);
-            List<GeoWithin<String>> driverList = new ArrayList<>();
-            _driverList.forEach(driver -> {
-                if(driver != null){
-                    driverList.add(driver);
-                }
-            });
-            //            List<>
-//            List<>
-
-            // 3. Try assigning the first available driver
-            System.out.println("driverList: " + driverList);
-
-            for(GeoWithin<String> driver : driverList){
-
-
-                String driverId = driver.getMember();
-                RLock driverRLock = redissonClient.getLock("lock_"+driver.getMember());
-
-                try{
-                    //try to acquire driver lock (Non Blocking 0)
-                    boolean driverLock = driverRLock.tryLock(0 ,60 , TimeUnit.SECONDS);
-                    if(driverLock){
-                        //assign driver
-                        System.out.println("Driver lock acquired for " + driverId);
-                        break;
-                    }
-
-
-                }finally {
-                    if(driverRLock.isHeldByCurrentThread()){
-                        driverRLock.unlock();
-                    }
-                }
-
-
-            }
-
-
-        }catch (Exception e){
-            log.error("Could not assign driver", e);
-        }
         finally {
-            if(lock.isHeldByCurrentThread()){
+            unlockSafely(userLock);
+            unlockSafely(driverLock);
+        }
+
+
+
+
+
+       }
+
+    private void completeAssignment(TripDetails tripDetails, String member) {
+    }
+
+    private void unlockSafely(RLock lock) {
+        if (lock != null && lock.isHeldByCurrentThread()) {
+            try {
                 lock.unlock();
+            } catch (IllegalMonitorStateException e) {
+                log.warn("Lock already released: {}", lock.getName());
             }
         }
     }
-}
-
-
+    }
 
 
 
