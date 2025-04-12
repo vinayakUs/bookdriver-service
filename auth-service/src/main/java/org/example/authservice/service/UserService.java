@@ -62,7 +62,9 @@ public class UserService {
         newUser.setUsername(registerRequest.getUsername());
         newUser.addRoles(getRolesForNewUser(isNewUserAsAdmin));
         newUser.setActive(true);
+        newUser.setName(registerRequest.getName());
         newUser.setEmailVerified(false);
+        newUser.setAccountType(registerRequest.getAccountType());
         return newUser;
     }
 

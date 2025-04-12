@@ -4,6 +4,7 @@ package org.example.authservice.model.entity;
 import jakarta.persistence.*;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotNull;
+import org.example.authservice.model.ACCOUNT_TYPE;
 import org.hibernate.annotations.NaturalId;
 
 import java.util.HashSet;
@@ -37,6 +38,10 @@ public class User   {
     @Column(name = "IS_ACTIVE", nullable = false)
     private Boolean active;
 
+    @Column
+    @Enumerated(EnumType.STRING)
+    private ACCOUNT_TYPE accountType;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "USER_AUTHORITY", joinColumns = {
             @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")}, inverseJoinColumns = {
@@ -59,6 +64,7 @@ public class User   {
         active = user.getActive();
         roles = user.getRoles();
         isEmailVerified = user.getEmailVerified();
+        this.accountType = user.getAccountType();
     }
 
     public void addRole(Role role) {
@@ -81,6 +87,14 @@ public class User   {
 
     public Long getId() {
         return id;
+    }
+
+    public ACCOUNT_TYPE getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(ACCOUNT_TYPE accountType) {
+        this.accountType = accountType;
     }
 
     public void setId(Long id) {

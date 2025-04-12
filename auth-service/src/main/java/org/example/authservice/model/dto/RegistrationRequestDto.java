@@ -3,6 +3,9 @@ package org.example.authservice.model.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import org.example.authservice.model.ACCOUNT_TYPE;
+
+import java.lang.reflect.Type;
 
 @Schema(name = "Registration Request", description = "The registration request payload")
 public class RegistrationRequestDto {
@@ -24,16 +27,29 @@ public class RegistrationRequestDto {
             type = "boolean", allowableValues = "true, false")
     private Boolean registerAsAdmin;
 
+    @NotNull
+    @Schema(name = "Weather Acc is User or Driver" , type = "enums" , required = true)
+    private ACCOUNT_TYPE accountType;
+
+    @NotNull
+    @Schema(name = "Name of user" , type = "string" )
+    private String name;
+
     public RegistrationRequestDto(String username, String email,
-                               String password, Boolean registerAsAdmin) {
+                                  String password, Boolean registerAsAdmin, ACCOUNT_TYPE accountType,String name) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.registerAsAdmin = registerAsAdmin;
+        this.accountType = accountType;
+        this.name = name;
     }
 
     public RegistrationRequestDto() {
     }
+
+    public String getName(){return name;}
+    public void setName(String name){this.name = name;}
 
     public String getUsername() {
         return username;
@@ -45,6 +61,13 @@ public class RegistrationRequestDto {
 
     public String getEmail() {
         return email;
+    }
+
+    public ACCOUNT_TYPE getAccountType() {
+        return accountType;
+    }
+    public void setAccountType(ACCOUNT_TYPE accountType) {
+        this.accountType = accountType;
     }
 
     public void setEmail(String email) {
