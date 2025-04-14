@@ -71,18 +71,17 @@
                         </goals>
                         <configuration>
                             <sourceDirectory>${project.basedir}/src/main/resources/avro</sourceDirectory>
-                              <outputDirectory>${project.basedir}/src/main/java</outputDirectory>
+<!--                              <outputDirectory>${project.basedir}/src/main/java</outputDirectory>-->
+                            <outputDirectory>${project.build.directory}/generated-sources/avro</outputDirectory>
+
                             <includes>
                                 <include>**/*.avro</include>
                             </includes>
                             <imports>
-                                <import>${project.basedir}/src/main/resources/avro/Test.avsc</import>
                                 <import>${project.basedir}/src/main/resources/avro/TRIP_STATUS.avsc</import>
                                 <import>${project.basedir}/src/main/resources/avro/Coordinate.avsc</import>
                                 <import>${project.basedir}/src/main/resources/avro/Location.avsc</import>
                                 <import>${project.basedir}/src/main/resources/avro/TripDetails.avsc</import>
-
-
                             </imports>
                         </configuration>
                     </execution>

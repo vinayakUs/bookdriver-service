@@ -1,26 +1,17 @@
 package org.example.driverservice.service;
 
 import com.redis.lettucemod.api.StatefulRedisModulesConnection;
-import com.redis.lettucemod.api.async.RedisModulesAsyncCommands;
-import io.lettuce.core.GeoArgs;
-import io.lettuce.core.GeoSearch;
 import io.lettuce.core.GeoWithin;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.example.driverservice.NoDriversAvailableException;
 import org.example.driverservice.exception.AssignDriverException;
-import org.example.driverservice.redlock.RedLock;
-import org.example.sharedlibs.avro.Location;
 import org.example.sharedlibs.avro.TripDetails;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 @Service

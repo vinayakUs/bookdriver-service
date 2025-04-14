@@ -2,8 +2,6 @@ package org.example.tripservice.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.sharedlibs.avro.TRIP_STATUS;
-import org.example.sharedlibs.avro.TripDetails;
 import org.example.tripservice.AvroToJsonConverter;
 import org.example.tripservice.dto.TripRequest;
 import org.example.tripservice.dto.TripResponseDTO;
