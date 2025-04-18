@@ -26,10 +26,6 @@ public class DriverServiceApplication {
 
             @Override
             public void run(String... args) throws Exception {
-//                System.out.println("Creating redisson client");
-//                RLock lock = redissonClient.getLock( "drivers:geo"+"driver:1");
-//                System.out.println(lock.tryLock());
-//                System.out.println(lock.isLocked());
 
             }
         };

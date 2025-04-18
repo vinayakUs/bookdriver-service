@@ -22,7 +22,7 @@
     pickUpMarker!: google.maps.marker.AdvancedMarkerElement | null;
     destinationMarker!: google.maps.marker.AdvancedMarkerElement | null;
     bounds!: google.maps.LatLngBounds;
-    polyline!: google.maps.Polyline;
+    polyline!: google.maps.Polyline | null;
 
 
     constructor(private sharedLocationService: SharedLocationService,) {
@@ -39,6 +39,24 @@
         this.pickUpMarker = null; // Now it's safe to assign null
       }
     }
+
+    removeEncodedPath(): void {
+
+      console.log("removeEncodedPath");
+      if (this.polyline) {
+        this.polyline.setMap(null);
+        this.polyline = null;
+      }
+      console.log("removeEncodedPath > Done end");
+
+      // this.polyline = new google.maps.Polyline({
+      //   path: null,
+      //   strokeColor: '#0000FF',
+      //   strokeOpacity: 1.0,
+      //   strokeWeight: 4,
+      //   map: this.map // Attach to the map
+      // });
+    }
     ngOnInit(): void {
       this.initMap();
 
@@ -46,6 +64,8 @@
           console.log('encoded path ---- ' +data);
           if(data){
             this.loadPolyline(data);
+          }else {
+            this.removeEncodedPath();
           }
         }});
 
@@ -57,7 +77,10 @@
           console.log("inside map -> destination location -> subscribe "+location);
           this.setDestinationMarker(({lat:location.geometry.location.lat,lng:location.geometry.location.lng}) as Location);
         }else {
+          console.log("inside map -> destination location > location null" )
           this.removeDestinationMarker(); // Remove marker when null
+
+            // this.removeEncodedPath();
         }
       });
       this.sharedLocationService.pickupSource$.subscribe(location => {
@@ -175,7 +198,6 @@
     }
 
     private loadPolyline(encodedPoly:string): void {
-      // const encodedPoly =  "ufvqBgoqdM~DbBNDEiAq@mJgAkOc@gE{Eu]}@gFOi@i@eAy@mAkAiA}KuHcC{A_A_A[m@mC{IeEeNuAaFuDuMiA_EiA}FTEjAv@`N~HhNbIlWlOpKnGl@XnBl@lIxBpBn@xA~@d@Nn@DdAG`@JhB|@vB|@fB~@PNf@zA^NT?fBk@h@Sh@IT?~Fp@jCJhEIr[iAhDCvBFlBVjC`ArBtAbBvArCdCdBzAz@^n@BbCA`Ic@x@Kp@QpEcCpGeEzJ{FhM{Gt@_@pLwGnGmDrEoCjHuDxMoHpIwExDuBhI_E|FeCbFoB~CuAhDcA~Bq@zNoAvPkApMmA|G{@tHeA~HoAvBq@dGeBjGeB|HqBzJsBjMeBvDk@dNiBv^wFfF]lCEfFFbDIfEe@xDg@dJuBrHgB`EgApRsFtFeBpK_DbBi@pIgCpDqAnIyD|EkBtU{HfVkIxS_HnJyChLaErLaGzEmCfPcIbQgGzAe@bFgBzHiCrImDtCsAdFsBzDwAfBYtMk@tJg@zPu@jAMpQwCtHqAdHqAhEaAtIuBzJsClOiFjFuBbEkBfAe@PEGHcAh@c@RuKpEqN~E}Ab@{OfEVVhCjAxG`DtIhExDlB`A^vG~BbB~@l@bAn@`BpB~Gv@lDDh@BpCErBQpJOfGF`ARrAN^tBrCfCdDrAdAn@VfB\\bBT~BPVRR`@h@lCZfCNpB@d@OvBD~AZz@xCjDjBbB`D~Af@ZXh@n@tBR^bAb@hAZ\\L|AdAb@d@`A~Ah@v@V`@h@nAhCvKxAfH`@~@dChEpHbJvDnFnCzD`F|GbElFfEhExFdFZJ~Eh@XJ\\ZjAfBxBpAhAz@RHn@F@x@FzCFpEEfA_@r@[x@Gx@A`@FnAPtAJjADtCT~AlApCzAdC`CnCfBtA`CpBpB|APPf@fAz@nBRh@j@n@hArAh@|@d@hBTfAXr@^f@^Tx@f@`BtAz@jAh@`A`@j@d@Zp@Pv@Rp@v@t@jA|@hBhA|Bx@z@v@n@t@n@R^?n@HtBl@bGSbHE`CTfAfAtEtAxFt@|CDz@d@`Hp@|Aj@bAr@r@hBxAxCrBLT^tD\\bFJ`AsHZKh@}BHqCHs@?gIJs@DOHWP{Bz@iClA{@b@eAr@sBhBkBfBmAfAiB_@aAG{Gm@mDk@yBa@_DU{Gw@qD[uAO}F{@uDq@qGq@mAOIDELKnASlAS|BaAbKeA~KU|Ca@rDCt@aIm@qBOa@c@cEc@OIGQaKcAeD[";
       const  decodedPath = google.maps.geometry.encoding.decodePath(encodedPoly);
       // Draw the polyline on the map
       this.polyline = new google.maps.Polyline({

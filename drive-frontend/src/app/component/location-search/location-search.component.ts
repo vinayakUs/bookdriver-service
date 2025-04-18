@@ -41,6 +41,8 @@ export class LocationSearchComponent implements OnInit {
     if(this.type == 'DESTINATION'){
       this.sharedLocationService.updateDestinationLocation(null);
     }
+    // this.sharedLocationService.updateEncodedPath(null);
+
     this.searchControl.setValue(null);
   }
   ngOnInit() {

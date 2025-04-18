@@ -11,6 +11,7 @@ import { ResetsuccessComponent } from './component/resetsuccess/resetsuccess.com
 import { ForgotPasswordComponent } from './component/forgotPassword/forgotPassword.component';
 import {NotFoundComponent} from './component/not-found/not-found.component';
 import {VerifyEmailComponent} from './component/verify-email/verify-email.component';
+import {TestComponent} from './component/test/test.component';
 
 // export const routes: Routes = [
 //   { path: 'login', component: LoginComponent },
@@ -38,7 +39,7 @@ export const routes: Routes = [
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'verify-email', component: VerifyEmailComponent },
   { path: '404', component: NotFoundComponent },
-
+  {path:'test',component: TestComponent},
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: '**', redirectTo: '/login' }
 

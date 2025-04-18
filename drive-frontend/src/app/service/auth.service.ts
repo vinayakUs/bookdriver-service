@@ -8,7 +8,7 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/api/auth';
+  private apiUrl = 'http://localhost:8080/auth-service/api/auth';
   private accessTokenKey = 'access_token';
   private refreshTokenKey = 'refresh_token';
   private isRefreshing = false;

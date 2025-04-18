@@ -3,14 +3,17 @@ package org.example.driverservice.exception;
 
 public class AssignDriverException extends RuntimeException {
     String message;
-    String error;
-    public AssignDriverException(String message) {
+    Throwable throwable;
+
+    public AssignDriverException(String message,Throwable throwable) {
         super(message);
         this.message=message;
+        this.throwable=throwable;
     }
-    public AssignDriverException(String message,String error) {
+
+    public AssignDriverException(String message ) {
         super(message);
         this.message=message;
-        this.error=error;
+        this.throwable=null;
     }
 }

@@ -2,6 +2,8 @@ package org.example.tripservice.graphql;
 
 
 
+import graphql.schema.DataFetchingEnvironment;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.example.tripservice.dto.TripRequest;
 import org.example.tripservice.dto.TripResponseDTO;
@@ -15,10 +17,14 @@ import org.springframework.stereotype.Controller;
 public class TripMutationResolver {
     private final TripService tripService;
 
+    private final HttpServletRequest servletRequest;
+
 
     @MutationMapping
-    public TripResponseDTO tripRequest(@Argument TripRequest request) {
-        return tripService.requestTrip(request);
+    public TripResponseDTO tripRequest(@Argument TripRequest request  ) {
+
+
+        return tripService.requestTrip(request, servletRequest.getHeader("X-USER-ID"));
     }
 
 

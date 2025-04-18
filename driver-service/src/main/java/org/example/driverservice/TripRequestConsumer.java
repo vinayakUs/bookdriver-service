@@ -3,6 +3,7 @@ package org.example.driverservice;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.driverservice.exception.AssignDriverException;
+import org.example.driverservice.exception.NoDriversAvailableException;
 import org.example.driverservice.service.AssignmentService;
 import org.example.sharedlibs.avro.TripDetails;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -20,7 +21,7 @@ public class TripRequestConsumer {
      *     participant User
      *     participant Service
      *     participant Redis
-     *
+     *     <p>
      *     User->>Service: Request Trip
      *     Service->>Redis: 1. Find nearby drivers (no lock)
      *     Service->>Redis: 2. Reserve driver (short lock)
@@ -33,7 +34,9 @@ public class TripRequestConsumer {
 
         try {
             log.info("Processing trip {}", tripDetails.getTripId());
+
             assignmentService.assignDriver(tripDetails);
+
         } catch (NoDriversAvailableException e) {
             handleDriverUnavailable(tripDetails, e);
         } catch (AssignDriverException e) {
@@ -45,9 +48,11 @@ public class TripRequestConsumer {
     }
 
     private void handleTechnicalFailure(TripDetails tripDetails, AssignDriverException e) {
+        log.error("AssignDriverException : {}", e.getMessage());
     }
 
     private void handleDriverUnavailable(TripDetails tripDetails, NoDriversAvailableException e) {
+        log.error("NoDriversAvailableException : {} ", e.getMessage() );
     }
 
 }

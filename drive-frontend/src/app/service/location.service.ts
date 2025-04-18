@@ -37,7 +37,7 @@ export interface AddressComponent {
   providedIn: 'root'
 })
 export class LocationService {
-  private apiUrl = 'http://localhost:8080/api/location';
+  private apiUrl = 'http://localhost:8080/location-service/api/location';
   constructor(private http: HttpClient) { }
 
   getAutoCompleteResults(q:string,type:string,token:string):Observable<AutoCompleteResult[]>{

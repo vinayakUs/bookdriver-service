@@ -1,0 +1,16 @@
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3); /* Light outline */
+  border-top-color: white; /* Full white top border */
+  border-radius: 50%;
+  animation: variableSpin 2s infinite;
+}
+
+@keyframes variableSpin {
+  0% { transform: rotate(0deg); animation-timing-function: ease-in; }
+  25% { transform: rotate(90deg); animation-timing-function: ease-out; } /* Speeds up */
+  50% { transform: rotate(180deg); animation-timing-function: ease-in; } /* Slows down */
+  75% { transform: rotate(270deg); animation-timing-function: ease-out; } /* Speeds up */
+  100% { transform: rotate(360deg); animation-timing-function: ease-in; } /* Slows down */
+}

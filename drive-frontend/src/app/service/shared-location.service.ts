@@ -24,7 +24,7 @@ export class SharedLocationService{
     console.log("inside shared destination "+location);
     this.destinationSource.next(destination);
   }
-  updateEncodedPath(path: string) {  // New method
+  updateEncodedPath(path: string|null) {  // New method
     console.log("inside encoded path "+location);
     this.encodedPathSource.next(path);
   }

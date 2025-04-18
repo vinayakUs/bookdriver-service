@@ -2,6 +2,7 @@ package org.example.tripservice.dto;
 
 
 import lombok.Data;
+import org.example.sharedlibs.avro.Location;
 
 import java.io.Serializable;
 import java.util.List;

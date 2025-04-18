@@ -403,3 +403,22 @@ gcloud compute instances create stack ^
   --labels=goog-ec-src=vm_add-gcloud ^
   --reservation-affinity=any
 ```
+
+Helpers for dev
+
+```redis
+GEOADD drivers:geo 73.6756 18.7250 driver:101
+GEOADD drivers:geo 73.6780 18.7275 driver:102
+GEOADD drivers:geo 73.6805 18.7222 driver:103
+GEOADD drivers:geo 73.6733 18.7200 driver:104
+GEOADD drivers:geo 73.6777 18.7288 driver:105
+GEOADD drivers:geo 73.6820 18.7261 driver:106
+GEOADD drivers:geo 73.6702 18.7233 driver:107
+GEOADD drivers:geo 73.6799 18.7247 driver:108
+GEOADD drivers:geo 73.6761 18.7219 driver:109
+GEOADD drivers:geo 73.6815 18.7290 driver:110
+```
+
+```redis
+
+```

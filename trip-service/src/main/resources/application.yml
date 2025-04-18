@@ -85,4 +85,4 @@ app:
     trip:
       requested : 'TRIP_REQUEST_EVENT'
 server:
-  port: 8086
+  port: 8085
