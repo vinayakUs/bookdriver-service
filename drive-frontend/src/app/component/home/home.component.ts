@@ -64,6 +64,7 @@ export class HomeComponent {
         summary: 'Missing Locations',
         detail: 'Select pickup and Drop location',
       });
+      return;
     }
 
     try {
@@ -81,9 +82,16 @@ export class HomeComponent {
         this.toggleSecondColumn();
       }
 
-    } catch(err) {
-      console.error("Submission error:", err);
-
+    } catch(err:any) {
+      // Extract error details
+      const errorResponse = err.error;
+      const success = errorResponse?.success ?? false;
+      const message = errorResponse?.data ?? 'An error occurred';
+      this.messageService.add({
+        severity: success ? 'success' : 'error',
+        summary: 'Something went wrong',
+        detail: message
+      });
 
     }
 

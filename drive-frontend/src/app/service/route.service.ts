@@ -14,7 +14,7 @@ export interface RoutePolyline {
 export class RouteService{
   constructor(private http: HttpClient) {
   }
-  private apiUrl = 'http://localhost:8080/location-service/api/navigation/routse';
+  private apiUrl = 'http://localhost:8080/location-service/api/navigation/route';
 
   getRoute(p1:PlaceDetail,p2:PlaceDetail):Observable<RoutePolyline>{
     let postData = {

@@ -22,9 +22,7 @@ public class NavigationController {
     @PostMapping("/route")
     public ResponseEntity<RouteResponseDto> route(@RequestBody RouteRequestDto routeRequestDto)   {
 
-      return    navigationService.getRoute(routeRequestDto) .map(y->{
-              return ResponseEntity.ok().body(y);
-          }).orElse(
+      return    navigationService.getRoute(routeRequestDto) .map(y-> ResponseEntity.ok().body(y)).orElse(
                   ResponseEntity.ok().body(new RouteResponseDto())
       );
 
