@@ -49,38 +49,55 @@ export class HomeComponent {
   showSecondColumn = false;
 
   toggleSecondColumn() {
+    console.log('toggleSecondColumn value '+this.showSecondColumn );
     this.showSecondColumn = !this.showSecondColumn;
   }
 
  async onSubmit(event: Event) {
     event.preventDefault(); // Prevents page refresh
 
-    const pickup:PlaceDetail  = this.sharedLocationService.getLatestPickupLocation();
-    const drop:PlaceDetail  = this.sharedLocationService.getLatestDestinationLocation();
+    // const pickup:PlaceDetail  = this.sharedLocationService.getLatestPickupLocation();
+    // const drop:PlaceDetail  = this.sharedLocationService.getLatestDestinationLocation();
 
-    if(!pickup || !drop){
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Missing Locations',
-        detail: 'Select pickup and Drop location',
-      });
-      return;
-    }
+    // if(!pickup || !drop){
+    //   this.messageService.add({
+    //     severity: 'error',
+    //     summary: 'Missing Locations',
+    //     detail: 'Select pickup and Drop location',
+    //   });
+    //   return;
+    // }
+   this.toggleSecondColumn();
+   console.log("available option: "+this.availableOption);
+
+   this.fareService.getVehicleTypes({}).subscribe(
+     response =>{
+       console.log('len availableOption bf api call ', this.availableOption.length);
+       this.availableOption = response.data.products.tiers.flatMap(tier=>tier.products);
+       console.log('len availableOption af api call ', this.availableOption.length);
+
+     }
+   )
+
+   return;
+
+
 
     try {
-     const [routeResponse , vehicleInfoResponse ]  = await Promise.all([
-       lastValueFrom(this.routeService.getRoute(pickup,drop)),
+     const [ vehicleInfoResponse ]  = await Promise.all([
+       // lastValueFrom(this.routeService.getRoute(pickup,drop)),
        lastValueFrom(this.fareService.getVehicleTypes({}))
      ]);
 
-      this.sharedLocationService.updateEncodedPath(routeResponse.polyline);
+
+      // this.sharedLocationService.updateEncodedPath(routeResponse.polyline);
       this.availableOption =
         vehicleInfoResponse.data.products.tiers.flatMap(tier =>
           tier.products
         );
-      if(this.availableOption!=null){
-        this.toggleSecondColumn();
-      }
+      // if(this.availableOption!=null){
+      //   this.toggleSecondColumn();
+      // }
 
     } catch(err:any) {
       // Extract error details

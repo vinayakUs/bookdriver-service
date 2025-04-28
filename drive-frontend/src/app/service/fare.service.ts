@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Observable, of, timeout} from 'rxjs';
+import {from, map, Observable, of, timeout} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {tap} from 'rxjs/operators';
 
@@ -41,7 +41,8 @@ export class FareService {
   }
 
 
-  getVehicleTypes(data:{}):Observable<VehicleInfoApiResponse> {
+  getVehicleTypes(data:{}):Observable<VehicleInfoApiResponse>  {
+
     const apiResponse: VehicleInfoApiResponse = {
       "data": {
         "products": {
@@ -101,10 +102,19 @@ export class FareService {
       }
     };
 
-    return of(apiResponse);
+
+    return from(this.sleep(4000)).pipe(
+      map( ()=> apiResponse),
+    )
 
 
   }
+
+  sleep(ms:number){
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+
 
 
 
