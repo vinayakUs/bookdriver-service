@@ -1,4 +1,15 @@
 spring:
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+  datasource:
+    url: jdbc:mysql://sql-service-radhikaandrew12-e714.c.aivencloud.com:22788/defaultdb
+    username: avnadmin
+    password: AVNS_UkmJhgfSOV7ARO2OiaS
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
   application:
     name: trip-service
   graphql:
@@ -84,5 +95,6 @@ app:
   event:
     trip:
       requested : 'TRIP_REQUEST_EVENT'
+      status.updated: 'trip.status.updated'
 server:
   port: 8085

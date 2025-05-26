@@ -11,6 +11,10 @@
       "name": "userId",
       "type": "string"
     },
+     {
+      "name": "drive",
+      "type": ["DriverDetails","null"]
+    },
     {
       "name": "source",
       "type": "Location"

@@ -41,8 +41,21 @@ public class TripService {
         trip.setTripStatus(TRIP_STATUS.TRIP_REQUESTED);
 
         try {
-     //       redisService.storeTrip("TRIP_REQUEST:" + tripId, avroToJsonConverter.deserialize(trip));
-           kafkaProducerService.publishTripEvent(tripId, trip);
+        //  redisService.storeTrip("TRIP_REQUEST:" + tripId, avroToJsonConverter.deserialize(trip));
+        //    kafkaProducerService.publishTripEvent(tripId, trip);
+
+           kafkaProducerService.publishTripUpdate(tripId, trip).thenAccept(result->{
+            System.out.println("successgully");
+           }).exceptionally(ex -> {
+            log.error("Kafka failed: " + ex.getMessage(), ex);
+            return null;
+        }) ;
+
+        response.setErrorCode("200");
+
+
+
+           
         } catch (Exception e) {
             log.error(e.getMessage() + e);
             response.setErrorCode("500");

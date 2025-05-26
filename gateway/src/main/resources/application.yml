@@ -1,6 +1,7 @@
 
 
-
+server:
+  port: 8080
 spring:
   data:
     redis:
@@ -30,7 +31,7 @@ spring:
         - id: 1
           uri: http://localhost:8086
           predicates:
-            - Path=/auth-service/**
+            - Path=/auth-sevrice/**
           filters:
             - StripPrefix=1
             - name: FixedWindowRateLimiterFilter

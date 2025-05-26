@@ -1,0 +1,19 @@
+{
+  "type": "record",
+  "name": "DriverDetails",
+  "namespace": "org.example.sharedlibs.avro",
+  "fields": [
+    {
+      "name": "id",
+      "type": "string"
+    },
+    {
+      "name": "name",
+      "type": "string"
+    },
+    {
+      "name": "metaData",
+      "type": "string"
+    }
+  ]
+}

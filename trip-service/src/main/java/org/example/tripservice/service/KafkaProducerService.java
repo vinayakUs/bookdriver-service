@@ -19,6 +19,15 @@ public class KafkaProducerService {
     @Value("${app.event.trip.requested}")
     private String tripRequestedTopic;
 
+
+        @Value("${app.event.trip.status.updated}")
+    private String tripStatusUpdatedToipic;
+
+    public CompletableFuture<SendResult<String,TripDetails>> publishTripUpdate(String tripId,TripDetails tripDetails){
+        return kafkaTemplate.send(tripStatusUpdatedToipic, tripId,tripDetails);
+    }
+
+
     public void publishTripEvent(String tripId, TripDetails trip) {
         CompletableFuture<SendResult<String, TripDetails>> future = kafkaTemplate.send(tripRequestedTopic, tripId, trip);
         future.whenComplete((r, e) -> {
@@ -28,5 +37,6 @@ public class KafkaProducerService {
                 log.info("Success sending trip event");
             }
         });
+        
     }
 }
